@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { fetchPosts } from '../../../api/wp';
-import type { WPPost } from '../domain.types';
+import type { WPPost } from '../post.types';
 
 export function usePosts() {
   const [items, setItems] = useState<WPPost[]>([]);

@@ -1,5 +1,5 @@
 import { PAGE_SIZE, POSTS_ENDPOINT, USE_EMBED } from '../constants/config.const';
-import type { WPPost } from '../features/posts/domain.types';
+import type { WPPost } from '../features/posts/post.types';
 
 // Build the query string for posts
 function makePostsUrl(page: number) {

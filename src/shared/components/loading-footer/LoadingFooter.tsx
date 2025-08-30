@@ -1,6 +1,7 @@
+// src/shared/components/loading-footer/LoadingFooter.tsx
 import React from 'react';
-import { ActivityIndicator, Text, TouchableOpacity, View } from 'react-native';
-import { loadingFooterStyles } from './LoadingFooter.styles';
+import { View } from 'react-native';
+import { ActivityIndicator, Button, Text, useTheme } from 'react-native-paper';
 
 export default function LoadingFooter({
   loading,
@@ -11,17 +12,40 @@ export default function LoadingFooter({
   canLoadMore: boolean;
   onLoadMore: () => void;
 }) {
+  const theme = useTheme();
+
   if (loading) {
     return (
-      <View style={loadingFooterStyles.wrap}><ActivityIndicator /></View>
+      <View style={{ paddingVertical: 20 }}>
+        <ActivityIndicator />
+      </View>
     );
   }
+
   if (!canLoadMore) {
-    return <Text style={loadingFooterStyles.end}>— End —</Text>;
+    return (
+      <Text
+        variant="bodySmall"
+        style={{
+          textAlign: 'center',
+          color: theme.colors.onSurfaceVariant,
+          paddingVertical: 16,
+          opacity: 0.8,
+        }}
+      >
+        — End —
+      </Text>
+    );
   }
+
   return (
-    <TouchableOpacity onPress={onLoadMore} style={loadingFooterStyles.btn} activeOpacity={0.8}>
-      <Text style={loadingFooterStyles.btnText}>Load more</Text>
-    </TouchableOpacity>
+    <Button
+      mode="contained-tonal"
+      onPress={onLoadMore}
+      style={{ alignSelf: 'center', marginVertical: 12 }}
+      icon="chevron-down"
+    >
+      Load more
+    </Button>
   );
 }
