@@ -1,11 +1,11 @@
 // app/index.tsx
 import React from 'react';
 import { FlatList, RefreshControl, View } from 'react-native';
-import { Appbar, Banner, Divider, useTheme } from 'react-native-paper';
+import { Banner, Divider, useTheme } from 'react-native-paper';
 
-import EmptyView from '@/src/shared/components/empty/EmptyView';
-import LoadingFooter from '@/src/shared/components/loading-footer/LoadingFooter';
-import PostCard from '@/src/shared/components/post-card/PostCard';
+import EmptyView from '@/src/components/empty/EmptyView';
+import LoadingFooter from '@/src/components/loading-footer/LoadingFooter';
+import PostItem from '@/src/components/post-item/PostItem';
 import { usePosts } from '../src/features/posts/hooks/usePosts';
 
 export default function HomeScreen() {
@@ -14,18 +14,8 @@ export default function HomeScreen() {
 
   return (
     <View style={{ flex: 1, backgroundColor: theme.colors.background }}>
-      {/* MD3 App Bar */}
-      <Appbar.Header mode="center-aligned" elevated>
-        <Appbar.Content title="Vien Giac Reader" />
-      </Appbar.Header>
-
-      {/* Error as MD3 Banner */}
       {Boolean(error) && (
-        <Banner
-          visible
-          icon="alert-circle"
-          style={{ marginHorizontal: 12, marginTop: 8 }}
-        >
+        <Banner visible icon="alert-circle" style={{ marginHorizontal: 12, marginTop: 8 }}>
           {error}
         </Banner>
       )}
@@ -33,23 +23,17 @@ export default function HomeScreen() {
       <FlatList
         data={items}
         keyExtractor={(p) => String(p.id)}
-        renderItem={({ item }) => <PostCard post={item} />}
+        renderItem={({ item }) => <PostItem post={item} />}
         refreshControl={<RefreshControl refreshing={refreshing} onRefresh={refresh} />}
-        contentContainerStyle={{
-          padding: 12,
-          paddingBottom: 28,
-          gap: 12,
-        }}
-        ItemSeparatorComponent={() => <View style={{ height: 0 }} />}
+        contentContainerStyle={{ paddingBottom: 28 }}
+        ItemSeparatorComponent={() => (
+          <Divider style={{ opacity: 0.5 }} />
+        )}
         ListEmptyComponent={!loading && !error ? <EmptyView /> : null}
         ListFooterComponent={
-          <View style={{ marginTop: 8 }}>
+          <View style={{ marginTop: 8, paddingHorizontal: 12 }}>
             <Divider style={{ opacity: 0.4 }} />
-            <LoadingFooter
-              loading={loading}
-              canLoadMore={canLoadMore}
-              onLoadMore={loadMore}
-            />
+            <LoadingFooter loading={loading} canLoadMore={canLoadMore} onLoadMore={loadMore} />
           </View>
         }
       />

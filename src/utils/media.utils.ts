@@ -1,4 +1,4 @@
-import type { WPPost } from '../../features/posts/post.types';
+import { WPPost } from "../features/posts/post.types";
 
 export function getFeaturedImage(post: WPPost) {
   const media = post._embedded?.['wp:featuredmedia']?.[0];

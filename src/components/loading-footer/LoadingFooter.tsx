@@ -1,4 +1,3 @@
-// src/shared/components/loading-footer/LoadingFooter.tsx
 import React from 'react';
 import { View } from 'react-native';
 import { ActivityIndicator, Button, Text, useTheme } from 'react-native-paper';

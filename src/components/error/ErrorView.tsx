@@ -1,6 +1,6 @@
 import React from 'react';
 import { View } from 'react-native';
-import { Text, List, useTheme } from 'react-native-paper';
+import { List, Text, useTheme } from 'react-native-paper';
 
 export default function ErrorView({ message }: { message: string }) {
   const theme = useTheme();
@@ -18,3 +18,4 @@ export default function ErrorView({ message }: { message: string }) {
       </Text>
     </View>
   );
+}

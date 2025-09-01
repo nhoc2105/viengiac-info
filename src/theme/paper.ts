@@ -26,5 +26,5 @@ export const paperTheme: MD3Theme = {
     outline: '#79747E',
   },
   fonts: configureFonts({ config: fontConfig.config }),
-  roundness: 12, // slightly more rounded for cards & chips
+  roundness: 4,
 };
