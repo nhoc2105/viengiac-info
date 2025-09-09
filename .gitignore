@@ -36,10 +36,8 @@ yarn-error.*
 # typescript
 *.tsbuildinfo
 
-app-example
-.idea/deviceManager.xml
-.idea/misc.xml
-.idea/modules.xml
-.idea/vcs.xml
-.idea/viengiac-info.iml
-.idea/caches/deviceStreaming.xml
+# IntelliJ
+.idea/
+
+# Coverage reports
+coverage/
