@@ -1,4 +1,4 @@
-import type { Article } from '@/src/features/articles/article.types';
+import type { Post } from '@/src/features/posts/post.types';
 import { timeAgo } from '@/src/utils/date-time.utils';
 import { decodeHtmlEntities } from '@/src/utils/html.utils';
 import React, { useMemo } from 'react';
@@ -7,7 +7,8 @@ import { List, Surface, Text, useTheme } from 'react-native-paper';
 
 const COVER_SIZE = { width: 112, height: 88 } as const;
 
-export default function ArticleItem({ article }: { article: Article }) {
+/** UI component for rendering a Post. */
+export default function PostItem({ article }: { article: Post }) {
   const theme = useTheme();
   const title = useMemo(() => decodeHtmlEntities(article.title ?? ''), [article.title]);
   const author = article.author ?? '';
@@ -37,6 +38,9 @@ export default function ArticleItem({ article }: { article: Article }) {
       left={(props) =>
         article.imageUrl ? (
           <Image
+            testID='cover-image'
+            accessibilityRole="image"             
+            accessibilityLabel="cover"
             source={{ uri: article.imageUrl }}
             resizeMode="cover"
             style={[
@@ -52,6 +56,9 @@ export default function ArticleItem({ article }: { article: Article }) {
           />
         ) : (
           <Surface
+            testID='placeholder-image'
+            accessibilityRole="image"             
+            accessibilityLabel="place"
             elevation={0}
             style={[
               props.style as any,

@@ -1,17 +1,16 @@
+/** Internal normalized model. */
+export type Post = {
+  /** Globally unique within the app. Use a stable key (e.g., url or api id with source) */
+  id: string;
+  /** Short ID of the provider/source (e.g., 'wp:viengiac', 'newsapi:tech') */
+  sourceId: string;
+  /** Human label of the source ('Vien Giac', 'NewsAPI – Tech') */
+  sourceName?: string;
 
-export type WPEmbeddedMedia = {
-  source_url?: string;
-  media_details?: { sizes?: Record<string, { source_url: string }> };
-};
-
-export type WPPost = {
-  id: number;
-  date: string;
-  link: string;
-  title: { rendered: string };
-  excerpt: { rendered: string };
-  _embedded?: {
-    author?: { name?: string }[];
-    'wp:featuredmedia'?: WPEmbeddedMedia[];
-  };
+  title: string;
+  summary?: string;
+  url: string;            // canonical link to open in browser
+  imageUrl?: string;
+  author?: string;
+  publishedAt: string;    // ISO8601
 };

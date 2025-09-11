@@ -1,15 +1,15 @@
-import { Article } from "@/src/features/articles/article.types";
+import { Post } from "@/src/features/posts/post.types";
 import { NewsProvider } from "./provider.types";
 
 export type AggregatedNext = {
-  items: Article[];
+  items: Post[];
   canLoadMore: boolean;
 };
 
-export class AggregatedFeed {
+export class AggregatedPostFeed {
   private state: Record<string, {
     page: number;
-    buffer: Article[];
+    buffer: Post[];
     canLoadMore: boolean;
   }> = {};
 
@@ -44,7 +44,7 @@ export class AggregatedFeed {
     }));
 
     // Merge all buffers
-    const merged: Article[] = Object.values(this.state).flatMap(s => s.buffer);
+    const merged: Post[] = Object.values(this.state).flatMap(s => s.buffer);
 
     // Sort DESC by time
     merged.sort((a, b) => new Date(b.publishedAt).getTime() - new Date(a.publishedAt).getTime());
@@ -61,6 +61,7 @@ export class AggregatedFeed {
 
     const canLoadMore = this.providers.some(p => this.state[p.id].canLoadMore) ||
                         Object.values(this.state).some(s => s.buffer.length > 0);
-    return { items: out, canLoadMore };
+
+                        return { items: out, canLoadMore };
   }
 }

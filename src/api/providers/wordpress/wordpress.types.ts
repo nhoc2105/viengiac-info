@@ -1,8 +1,8 @@
-/** Minimal WordPress post subset (only what we need) */
-export type WordPressPost = {
+/** Minimal WordPress post subset (only what we need). External shape from WordPress API */
+export type WordPressApiPost = {
   id: number;
   date: string;         // ISO
-  modifiedDate: string; // ISO
+  modified: string; // ISO
   link: string;
   title: { rendered: string };
   excerpt?: { rendered?: string };
@@ -20,6 +20,4 @@ export type WordPressConfig = {
   site: string;
   /** Optional UI label, e.g., 'Vien Giac' */
   label?: string;
-  /** If true, append &_embed to speed up author/media lookup */
-  useEmbed?: boolean;
 };

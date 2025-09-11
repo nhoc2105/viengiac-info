@@ -1,7 +1,7 @@
-import type { Article } from '@/src/features/articles/article.types';
+import type { Post } from '@/src/features/posts/post.types';
 
 export type LoadPageResult = {
-  items: Article[];
+  items: Post[];
   /** Whether the provider can return more items beyond the requested page */
   canLoadMore: boolean;
 };
@@ -12,7 +12,7 @@ export interface NewsProvider {
   /** For UI / debugging */
   label: string;
   /**
-   * Load one page of articles from this provider.
+   * Load one page of posts from this provider.
    * `page` is 1-based. `pageSize` is the desired number of items.
    */
   loadPage(page: number, pageSize: number): Promise<LoadPageResult>;

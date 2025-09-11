@@ -5,11 +5,11 @@ import { Banner, Divider, useTheme } from 'react-native-paper';
 
 import EmptyView from '@/src/components/empty/EmptyView';
 import LoadingFooter from '@/src/components/loading-footer/LoadingFooter';
-import ArticleItem from '@/src/features/articles/ArticleItem';
-import { useArticles } from '@/src/features/articles/hooks/useArticles';
+import PostItem from '@/src/features/posts/PostItem';
+import { usePosts } from '@/src/features/posts/hooks/usePosts';
 
 export default function HomeScreen() {
-  const { items, loading, error, refreshing, canLoadMore, refresh, loadMore } = useArticles();
+  const { items, loading, error, refreshing, canLoadMore, refresh, loadMore } = usePosts();
   const theme = useTheme();
 
   return (
@@ -23,7 +23,7 @@ export default function HomeScreen() {
       <FlatList
         data={items}
         keyExtractor={(a) => String(a.id)}
-        renderItem={({ item }) => <ArticleItem article={item} />}
+        renderItem={({ item }) => <PostItem article={item} />}
         refreshControl={<RefreshControl refreshing={refreshing} onRefresh={refresh} />}
         contentContainerStyle={{ paddingBottom: 28 }}
         ItemSeparatorComponent={() => (
