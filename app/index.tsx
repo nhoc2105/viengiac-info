@@ -23,7 +23,7 @@ export default function HomeScreen() {
       <FlatList
         data={items}
         keyExtractor={(a) => String(a.id)}
-        renderItem={({ item }) => <PostItem article={item} />}
+        renderItem={({ item }) => <PostItem post={item} />}
         refreshControl={<RefreshControl refreshing={refreshing} onRefresh={refresh} />}
         contentContainerStyle={{ paddingBottom: 28 }}
         ItemSeparatorComponent={() => (

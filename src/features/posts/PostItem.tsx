@@ -8,13 +8,13 @@ import { List, Surface, Text, useTheme } from 'react-native-paper';
 const COVER_SIZE = { width: 112, height: 88 } as const;
 
 /** UI component for rendering a Post. */
-export default function PostItem({ article }: { article: Post }) {
+export default function PostItem({ post }: { post: Post }) {
   const theme = useTheme();
-  const title = useMemo(() => decodeHtmlEntities(article.title ?? ''), [article.title]);
-  const author = article.author ?? '';
-  const elapsed = timeAgo(article.publishedAt);
-  const meta = [article.sourceName, elapsed].filter(Boolean).join(' · ');
-  const open = () => Linking.openURL(article.url);
+  const title = useMemo(() => decodeHtmlEntities(post.title ?? ''), [post.title]);
+  const author = post.author ?? '';
+  const elapsed = timeAgo(post.publishedAt);
+  const meta = [post.sourceName, elapsed].filter(Boolean).join(' · ');
+  const open = () => Linking.openURL(post.url);
 
   return (
     <List.Item
@@ -36,12 +36,12 @@ export default function PostItem({ article }: { article: Post }) {
         </Text>
       )}
       left={(props) =>
-        article.imageUrl ? (
+        post.imageUrl ? (
           <Image
             testID='cover-image'
             accessibilityRole="image"             
             accessibilityLabel="cover"
-            source={{ uri: article.imageUrl }}
+            source={{ uri: post.imageUrl }}
             resizeMode="cover"
             style={[
               props.style as any,

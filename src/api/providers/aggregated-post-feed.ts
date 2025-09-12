@@ -62,6 +62,6 @@ export class AggregatedPostFeed {
     const canLoadMore = this.providers.some(p => this.state[p.id].canLoadMore) ||
                         Object.values(this.state).some(s => s.buffer.length > 0);
 
-                        return { items: out, canLoadMore };
+    return { items: out, canLoadMore };
   }
 }

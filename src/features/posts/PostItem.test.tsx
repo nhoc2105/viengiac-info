@@ -1,6 +1,6 @@
 import { paperTheme } from '@/src/theme/paper';
-import { fireEvent, render } from '@testing-library/react-native';
-import React from 'react';
+import { fireEvent, render, screen, waitFor } from '@testing-library/react-native';
+import React, { act } from 'react';
 import { Linking } from 'react-native';
 import { PaperProvider } from 'react-native-paper';
 import PostItem from './PostItem';
@@ -23,28 +23,32 @@ describe('PostItem', () => {
 
     // WHEN
     const { getByText } = render(
-      <PaperProvider theme={paperTheme}><PostItem article={post as any} /></PaperProvider>
+      <PaperProvider theme={paperTheme}><PostItem post={post as any} /></PaperProvider>
     );
 
     // THEN
-    // Decoded & stripped title should still contain text 'Hello & <em>world</em>' -> decodeHtmlEntities on whole string
-    getByText('Hello & <em>world</em>');
-    getByText('Site · 5m ago');
+    await waitFor(() => {
+      expect(screen.getByText('Hello & <em>world</em>')).toBeTruthy();
+      expect(screen.getByText('Site · 5m ago')).toBeTruthy();
+    });
+
 
     // WHEN
-    fireEvent.press(getByText('Hello & <em>world</em>'));
+    await act(() => {
+      fireEvent.press(getByText('Hello & <em>world</em>'))
+    });
 
     // THEN
-    expect(open).toHaveBeenCalledWith('https://example.com');
+    await waitFor(() => expect(open).toHaveBeenCalledWith('https://example.com'));
   });
 
-  it('should show cover image when imageUrl present else placeholder', () => {
+  it('should show cover image when imageUrl present else placeholder', async () => {
     // GIVEN
     const imageUrl = 'https://img';
 
     // WHEN
     const { rerender, getByTestId } = render(
-      <PaperProvider theme={paperTheme}><PostItem article={{...post as any, imageUrl: imageUrl}} /></PaperProvider>
+      <PaperProvider theme={paperTheme}><PostItem post={{...post as any, imageUrl: imageUrl}} /></PaperProvider>
     );
 
     // THEN
@@ -55,10 +59,18 @@ describe('PostItem', () => {
     const imageUrlUndefined = undefined;
     
     // WHEN
-    rerender(<PaperProvider theme={paperTheme}><PostItem article={{...post as any, imageUrl: imageUrlUndefined}} /></PaperProvider>);
-    
+    await act(async () => {
+      rerender(
+        <PaperProvider theme={paperTheme}>
+          <PostItem post={{ ...post as any, imageUrl: imageUrlUndefined }} />
+        </PaperProvider>
+      );
+    });
+
     // THEN
-    expect(() => getByTestId('cover-image')).toThrow();
-    getByTestId('placeholder-image');
+    await waitFor(() => {
+      expect(screen.queryByTestId('cover-image')).toBeNull();
+      expect(screen.getByTestId('placeholder-image')).toBeTruthy();
+    });
   });
 });

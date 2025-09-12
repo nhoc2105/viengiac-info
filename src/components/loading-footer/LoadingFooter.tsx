@@ -16,7 +16,7 @@ export default function LoadingFooter({
   if (loading) {
     return (
       <View style={{ paddingVertical: 20 }}>
-        <ActivityIndicator />
+        <ActivityIndicator testID='activity-indicator'/>
       </View>
     );
   }

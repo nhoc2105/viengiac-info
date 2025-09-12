@@ -4,7 +4,7 @@ export function buildPostsUrl(cfg: WordPressConfig, page: number, pageSize: numb
   const url = new URL(`${cfg.site.replace(/\/$/, '')}/wp-json/wp/v2/posts`);
   url.searchParams.set('per_page', String(pageSize));
   url.searchParams.set('page', String(page));
-  url.searchParams.set('_embed', '');
+  url.searchParams.set('_embed', 'true');
   return url.toString();
 }
 
