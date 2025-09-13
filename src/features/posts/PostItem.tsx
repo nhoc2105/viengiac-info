@@ -11,7 +11,6 @@ const COVER_SIZE = { width: 112, height: 88 } as const;
 export default function PostItem({ post }: { post: Post }) {
   const theme = useTheme();
   const title = useMemo(() => decodeHtmlEntities(post.title ?? ''), [post.title]);
-  const author = post.author ?? '';
   const elapsed = timeAgo(post.publishedAt);
   const meta = [post.sourceName, elapsed].filter(Boolean).join(' · ');
   const open = () => Linking.openURL(post.url);

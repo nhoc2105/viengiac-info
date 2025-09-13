@@ -47,7 +47,8 @@ export function usePosts() {
     if (!loading && canLoadMore) load(false);
   }, [loading, canLoadMore, load]);
 
-  // initial load
+
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(() => { refresh(); }, []);
 
   return { items, loading, error, refreshing, canLoadMore, refresh, loadMore };
