@@ -9,21 +9,17 @@ export const providers: NewsProvider[] = [
   createWordPressProvider({
     site: 'https://viengiac.info',
     label: 'Chua Vien Giac',
-    useEmbed: true,
   }),
   createWordPressProvider({
     site: 'https://vienlac.de',
     label: 'Chua Vien Lac',
-    useEmbed: true,
   }),
   createWordPressProvider({
     site: 'https://amitayus.net/viet',
     label: 'Tu Vien Vo Luong Tho',
-    useEmbed: true,
   }),
   createWordPressProvider({
     site: 'https://www.vienminh.ch/',
     label: 'Chua Vien Minh',
-    useEmbed: true,
   }),
 ];
