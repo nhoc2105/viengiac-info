@@ -1,0 +1,58 @@
+name: Reusable - Compile Android
+
+on:
+  workflow_call:
+    inputs:
+      node-version:
+        description: Node version to use
+        required: false
+        default: '20'
+        type: string
+      jdk-version:
+        description: Java version (AGP 8.x requires 17)
+        required: false
+        default: '17'
+        type: string
+
+jobs:
+  compile-android:
+    name: Compile Android
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v5
+        with:
+          node-version: ${{ inputs['node-version'] }}
+          cache: 'npm'
+
+      - name: Install deps
+        run: npm ci
+
+      # Generate android/ from Expo config (CNG) so Gradle can compile
+      - name: Expo prebuild (Android)
+        env:
+          EXPO_NO_INTERACTIVE: '1'
+        run: npx expo prebuild --platform android --non-interactive
+        # Expo's Continuous Native Generation creates native projects on demand.
+
+      # JDK 17 is required by modern Android Gradle Plugin (8.x)
+      - name: Setup Java
+        uses: actions/setup-java@v5
+        with:
+          distribution: 'temurin'
+          java-version: ${{ inputs['jdk-version'] }}
+
+      # Smarter Gradle caching/telemetry on GitHub Actions
+      - name: Setup Gradle
+        uses: gradle/actions/setup-gradle@v4
+
+      # Fast compile-only to catch Java/Kotlin errors (no packaging)
+      - name: Compile Android sources (Debug)
+        working-directory: android
+        run: |
+          chmod +x ./gradlew
+          ./gradlew :app:compileDebugSources --build-cache || \
+          ./gradlew :app:compileDebugKotlin :app:compileDebugJavaWithJavac --build-cache
