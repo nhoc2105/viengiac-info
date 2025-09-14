@@ -1,0 +1,65 @@
+name: Lint, test, and Android build (Expo)
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+
+jobs:
+  ci:
+    runs-on: ubuntu-latest
+    timeout-minutes: 35
+
+    steps:
+      - uses: actions/checkout@v4
+
+      # JS toolchain for lint/tests
+      - name: Setup Node
+        uses: actions/setup-node@v5
+        with:
+          node-version: '30'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Lint
+        run: npm run lint
+
+      - name: Unit tests
+        run: npm test
+
+      # ---- Expo managed → prebuild + Gradle "vanilla" build ----
+
+      # JDK 17 is required by modern Android Gradle Plugin (8.x)
+      - name: Setup Java 17
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '17'
+
+      # Gradle caching & config (speeds up subsequent runs)
+      - name: Setup Gradle
+        uses: gradle/actions/setup-gradle@v4
+
+      # Generate android/ from your Expo project (no need to commit it)
+      - name: Expo prebuild (Android only)
+        env:
+          EXPO_NO_INTERACTIVE: '1'
+        run: |
+          npx expo prebuild --platform android --non-interactive
+      # Build a fast debug APK for PR signal (no signing required)
+      - name: Build Android (assembleDebug)
+        working-directory: android
+        run: |
+          chmod +x ./gradlew
+          ./gradlew --no-daemon assembleDebug
+
+      # Publish the debug APK to the workflow artifacts
+      - name: Upload debug APK
+        uses: actions/upload-artifact@v4
+        with:
+          name: app-debug.apk
+          path: android/app/build/outputs/apk/debug/app-debug.apk
+          if-no-files-found: error
+          retention-days: 7
