@@ -6,7 +6,8 @@ on:
   pull_request:
 
 jobs:
-  ci:
+  compile-android:
+    name: Lint, test, and compile Android
     runs-on: ubuntu-latest
     timeout-minutes: 35
 
@@ -48,18 +49,11 @@ jobs:
           EXPO_NO_INTERACTIVE: '1'
         run: |
           npx expo prebuild --platform android --non-interactive
-      # Build a fast debug APK for PR signal (no signing required)
-      - name: Build Android (assembleDebug)
+    
+      # Compile-only (fast) to catch Java/Kotlin errors
+      - name: Compile Android sources (Debug)
         working-directory: android
         run: |
           chmod +x ./gradlew
-          ./gradlew --no-daemon assembleDebug
+          ./gradlew :app:compileDebugSources --build-cache
 
-      # Publish the debug APK to the workflow artifacts
-      - name: Upload debug APK
-        uses: actions/upload-artifact@v4
-        with:
-          name: app-debug.apk
-          path: android/app/build/outputs/apk/debug/app-debug.apk
-          if-no-files-found: error
-          retention-days: 7
