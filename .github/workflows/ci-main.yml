@@ -1,0 +1,34 @@
+name: CI (Main)
+
+on:
+  pull_request:
+  push:
+    branches:        
+      - '**'    # all branches
+
+# Cancel outdated runs on the same branch/PR to save minutes
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  lint-test:
+    name: Lint & Test
+    uses: ./.github/workflows/_ci-lint-test.yml
+    with:
+      node-version: '20'
+
+  compile-android:
+    name: Compile Android
+    needs: lint-test
+    uses: ./.github/workflows/_ci-compile-android.yml
+    with:
+      node-version: '20'
+      jdk-version: '17'
+
+  compile-ios:
+    name: Compile iOS
+    needs: lint-test
+    uses: ./.github/workflows/_ci-compile-ios.yml
+    with:
+      node-version: '20'
