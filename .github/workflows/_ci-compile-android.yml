@@ -56,3 +56,22 @@ jobs:
           chmod +x ./gradlew
           ./gradlew :app:compileDebugSources --build-cache || \
           ./gradlew :app:compileDebugKotlin :app:compileDebugJavaWithJavac --build-cache
+      
+      # Build APK Debug (no sign)
+      - name: Build APK (Debug)
+        working-directory: android
+        run: |
+          chmod +x ./gradlew
+          ./gradlew :app:assembleDebug --build-cache --no-daemon --stacktrace
+
+      # Upload artifact APK
+      - name: Upload APK artifact (Debug)
+        uses: actions/upload-artifact@v4
+        with:
+          name: app-Debug-${{ github.sha }}.apk
+          path: android/app/build/outputs/apk/debug/*.apk
+          retention-days: 14
+
+
+
+  
