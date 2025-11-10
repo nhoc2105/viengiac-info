@@ -1,16 +1,11 @@
 /** Internal normalized model. */
 export type Post = {
-  /** Globally unique within the app. Use a stable key (e.g., url or api id with source) */
+  author: string[];
   id: string;
-  /** Short ID of the provider/source (e.g., 'wp:viengiac', 'newsapi:tech') */
+  imageUrl: string;
+  publishedAt: string;    // ISO
   sourceId: string;
-  /** Human label of the source ('Vien Giac', 'NewsAPI – Tech') */
-  sourceName?: string;
-
+  summary: string;
   title: string;
-  summary?: string;
   url: string;            // canonical link to open in browser
-  imageUrl?: string;
-  author?: string;
-  publishedAt: string;    // ISO8601
 };

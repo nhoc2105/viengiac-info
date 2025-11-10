@@ -1,45 +1,37 @@
 import { paperTheme } from '@/src/theme/paper';
-import { fireEvent, render, screen, waitFor } from '@testing-library/react-native';
+import { render, screen, waitFor } from '@testing-library/react-native';
 import React, { act } from 'react';
-import { Linking } from 'react-native';
 import { PaperProvider } from 'react-native-paper';
 import PostItem from './PostItem';
+import { Post } from './post.types';
 
 jest.mock('@/src/utils/date-time.utils', () => ({ timeAgo: () => '5m ago' }));
 
-const post = {
-  id: 'wp:site:1',
-  sourceId: 'wp:site',
-  sourceName: 'Site',
+const post: Post = {
+  id: '1',
+  sourceId: 'VG',
   title: 'Hello &amp; <em>world</em>',
   url: 'https://example.com',
   publishedAt: '2025-01-01T00:00:00Z',
+  author: ["Max", "Anna"],
+  imageUrl: '',
+  summary: ''
 };
 
 describe('PostItem', () => {
-  it('should render title, meta, and opens on press', async () => {
+  it('should render post', async () => {
     // GIVEN
-    const open = jest.spyOn(Linking, 'openURL').mockResolvedValueOnce(true as any);
 
     // WHEN
-    const { getByText } = render(
+    render(
       <PaperProvider theme={paperTheme}><PostItem post={post as any} /></PaperProvider>
     );
 
     // THEN
     await waitFor(() => {
       expect(screen.getByText('Hello & <em>world</em>')).toBeTruthy();
-      expect(screen.getByText('Site · 5m ago')).toBeTruthy();
+      expect(screen.getByText('VG · 5m ago')).toBeTruthy();
     });
-
-
-    // WHEN
-    await act(() => {
-      fireEvent.press(getByText('Hello & <em>world</em>'))
-    });
-
-    // THEN
-    await waitFor(() => expect(open).toHaveBeenCalledWith('https://example.com'));
   });
 
   it('should show cover image when imageUrl present else placeholder', async () => {

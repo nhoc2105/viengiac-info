@@ -23,7 +23,7 @@ describe('timeAgo', () => {
     const t = new Date(base - 30 * 1000).toISOString();
 
     // THEN
-    expect(timeAgo(t)).toBe('30s ago');
+    expect(timeAgo(t)).toBe('30 giây');
   });
 
   it('should format minutes', () => {
@@ -31,7 +31,7 @@ describe('timeAgo', () => {
     const t = new Date(base - 5 * 60 * 1000).toISOString();
 
     // THEN
-    expect(timeAgo(t)).toBe('5m ago');
+    expect(timeAgo(t)).toBe('5 phút');
   });
 
   it('should format hours', () => {
@@ -39,7 +39,7 @@ describe('timeAgo', () => {
     const t = new Date(base - 3 * 60 * 60 * 1000).toISOString();
 
     // THEN
-    expect(timeAgo(t)).toBe('3h ago');
+    expect(timeAgo(t)).toBe('3 giờ');
   });
 
   it('should format days', () => {
@@ -47,7 +47,7 @@ describe('timeAgo', () => {
     const t = new Date(base - 2 * 24 * 60 * 60 * 1000).toISOString();
 
     // THEN
-    expect(timeAgo(t)).toBe('2d ago');
+    expect(timeAgo(t)).toBe('2 ngày');
   });
 
   it('should format months', () => {
@@ -55,7 +55,7 @@ describe('timeAgo', () => {
     const t = new Date(base - 4 * 30 * 24 * 60 * 60 * 1000).toISOString();
 
     // THEN
-    expect(timeAgo(t)).toBe('4mo ago');
+    expect(timeAgo(t)).toBe('4 tháng');
   });
 
   it('should format years', () => {
@@ -63,6 +63,6 @@ describe('timeAgo', () => {
     const t = new Date(base - 13 * 30 * 24 * 60 * 60 * 1000).toISOString();
 
     // THEN
-    expect(timeAgo(t)).toBe('1y ago');
+    expect(timeAgo(t)).toBe('1 năm');
   });
 });

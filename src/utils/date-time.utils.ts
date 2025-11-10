@@ -6,20 +6,20 @@ export function timeAgo(isoDate: string): string {
   const now = Date.now();
   const diffSec = Math.max(0, Math.floor((now - published) / 1000));
 
-  if (diffSec < 60) return `${diffSec}s ago`;
+  if (diffSec < 60) return `${diffSec} giây`;
 
   const diffMin = Math.floor(diffSec / 60);
-  if (diffMin < 60) return `${diffMin}m ago`;
+  if (diffMin < 60) return `${diffMin} phút`;
 
   const diffHr = Math.floor(diffMin / 60);
-  if (diffHr < 24) return `${diffHr}h ago`;
+  if (diffHr < 24) return `${diffHr} giờ`;
 
   const diffDay = Math.floor(diffHr / 24);
-  if (diffDay < 30) return `${diffDay}d ago`;
+  if (diffDay < 30) return `${diffDay} ngày`;
 
   const diffMon = Math.floor(diffDay / 30);
-  if (diffMon < 12) return `${diffMon}mo ago`;
+  if (diffMon < 12) return `${diffMon} tháng`;
 
   const diffYr = Math.floor(diffMon / 12);
-  return `${diffYr}y ago`;
+  return `${diffYr} năm`;
 }

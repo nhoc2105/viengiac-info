@@ -31,7 +31,7 @@ export default function HomeScreen() {
         )}
         ListEmptyComponent={!loading && !error ? <EmptyView /> : null}
         ListFooterComponent={
-          <View style={{ marginTop: 8, paddingHorizontal: 12 }}>
+          <View style={{ marginTop: 4, paddingHorizontal: 8 }}>
             <Divider style={{ opacity: 0.4 }} />
             <LoadingFooter loading={loading} canLoadMore={canLoadMore} onLoadMore={loadMore} />
           </View>

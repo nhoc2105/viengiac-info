@@ -6,7 +6,7 @@ export type LoadPageResult = {
   canLoadMore: boolean;
 };
 
-export interface NewsProvider {
+export interface PostProvider {
   /** Stable identifier; keep it short (e.g., 'wp:viengiac') */
   id: string;
   /** For UI / debugging */

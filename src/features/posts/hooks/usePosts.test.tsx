@@ -1,88 +1,135 @@
-import { usePosts } from '@/src/features/posts/hooks/usePosts';
-import { act, render, screen, waitFor } from '@testing-library/react-native';
+import * as firebaseProvider from '@/src/api/providers/firebase/firebase.provider';
+import { fireEvent, render, waitFor } from '@testing-library/react-native';
 import React from 'react';
-import { Text } from 'react-native';
+import { Button, Text } from 'react-native';
+import { Post } from '../post.types';
+import { usePosts } from './usePosts';
 
-// Mock feed class
-const mockNext = jest.fn();
-const mockReset = jest.fn();
+jest.mock('@/src/api/providers/firebase/firebase.provider');
 
-jest.mock('@/src/api/providers/aggregated-post-feed', () => ({
-  AggregatedPostFeed: jest.fn().mockImplementation(() => ({
-    next: mockNext,
-    reset: mockReset,
-  })),
-}));
+const mockLoadPage = jest.fn();
 
-// Mock providers & page size constants to avoid side-effects
-jest.mock('@/src/api/providers', () => ({ providers: [] }));
-jest.mock('@/src/constants/config.const', () => ({ PAGE_SIZE: 2 }));
+const mockPost = (id: string): Post => ({
+  id,
+  sourceId: 'firebase:posts',
+  title: `Post ${id}`,
+  url: `https://example.com/${id}`,
+  publishedAt: new Date().toISOString(),
+  author: [],
+  imageUrl: '',
+  summary: ''
+});
 
-// Integration component to test the hook
 function IntegrationComponent() {
   const { items, loading, error, refreshing, canLoadMore, refresh, loadMore } = usePosts();
-  // Expose minimal state via text for assertions
   return (
     <>
-      <Text testID="items-count">{String(items.length)}</Text>
-      <Text testID="loading">{String(loading)}</Text>
-      <Text testID="error">{error ?? ''}</Text>
-      <Text testID="refreshing">{String(refreshing)}</Text>
-      <Text testID="canLoadMore">{String(canLoadMore)}</Text>
-      <Text onPress={() => refresh()} testID="do-refresh">refresh</Text>
-      <Text onPress={() => loadMore()} testID="do-load-more">loadMore</Text>
+      {items.map((item) => (
+        <Text key={item.id} testID={`post-${item.id}`}>
+          {item.title}
+        </Text>
+      ))}
+      {loading && <Text testID="loading">Loading...</Text>}
+      {error && <Text testID="error">{error}</Text>}
+      <Button title="Refresh" onPress={refresh} testID="refresh-button" />
+      {canLoadMore && (
+        <Button title="Load More" onPress={loadMore} testID="load-more-button" />
+      )}
+      <Text testID="refreshing">{refreshing}</Text>
     </>
   );
 }
 
-describe('usePosts', () => {
-  beforeEach(() => {
-    mockNext.mockReset();
-    mockReset.mockReset();
+beforeEach(() => {
+  jest.clearAllMocks();
+  (firebaseProvider.createFirebaseProvider as jest.Mock).mockReturnValue({
+    id: 'firebase:posts',
+    label: 'Firebase Posts',
+    loadPage: mockLoadPage,
   });
+});
 
-  it('should refresh on mount, load items, and update flags', async () => {
+describe('usePosts', () => {
+  it('should render initial posts', async () => {
     // GIVEN
-    mockNext.mockResolvedValueOnce({ items: [{ id: 'a', sourceId: 's', title: 't', url: 'u', publishedAt: '2025-01-01' }], canLoadMore: true });
-    
+    mockLoadPage.mockResolvedValueOnce({
+      items: [mockPost('1'), mockPost('2')],
+      canLoadMore: true,
+    });
+
     // WHEN
-    render(<IntegrationComponent />);
+    const { getByTestId } = render(<IntegrationComponent />);
+    await waitFor(() => getByTestId('post-1'));
 
     // THEN
-    await waitFor(() => expect(screen.getByTestId('items-count').children.join('')).toBe('1'));
-    expect(screen.getByTestId('loading').children.join('')).toBe('false');
-    expect(screen.getByTestId('error').children.join('')).toBe('');
-    expect(screen.getByTestId('canLoadMore').children.join('')).toBe('true');
-    expect(mockReset).toHaveBeenCalled();
+    expect(getByTestId('post-1')).toBeTruthy();
+    expect(getByTestId('post-2')).toBeTruthy();
   });
 
-  it('should add more items when load more allowed', async () => {
+  
+  it('should load more posts when "Load More" is pressed', async () => {
     // GIVEN
-    mockNext.mockResolvedValueOnce({ items: [{ id: 'a', sourceId: 's', title: 't', url: 'u', publishedAt: '2025-01-01' }], canLoadMore: true });
-    
+    mockLoadPage
+      .mockResolvedValueOnce({
+        items: [mockPost('1')],
+        canLoadMore: true,
+      })
+      .mockResolvedValueOnce({
+        items: [mockPost('2')],
+        canLoadMore: false,
+      });
+
+    // WHEN
+    const { getByTestId, queryByTestId } = render(<IntegrationComponent />);
+
+    await waitFor(() => getByTestId('post-1'));
+
+    fireEvent.press(getByTestId('load-more-button'));
+
+    await waitFor(() => getByTestId('post-2'));
+
+    // THEN
+    expect(getByTestId('post-2')).toBeTruthy();
+    expect(queryByTestId('load-more-button')).toBeNull(); // No more posts to load
+  });
+
+  it('should refresh posts when "Refresh" is pressed', async () => {
+    // GIVEN
+    mockLoadPage
+      .mockResolvedValueOnce({
+        items: [mockPost('1')],
+        canLoadMore: true,
+      })
+      .mockResolvedValueOnce({
+        items: [mockPost('99')],
+        canLoadMore: true,
+      });
+
+    // WHEN render first post
+    const { getByTestId, queryByTestId } = render(<IntegrationComponent />);
+    await waitFor(() => getByTestId('post-1'));
+
+    // AND when refresh
+    fireEvent.press(getByTestId('refresh-button'));
+    await waitFor(() => getByTestId('post-99'));
+
+    // THEN
+    expect(getByTestId('refreshing').props.children).toBe(false);
+    expect(getByTestId('post-99')).toBeTruthy();
+    expect(queryByTestId('post-1')).toBeNull(); // Old post should be gone
+  });
+
+  
+  it('should display error message on failure', async () => {
+    // GIVEN
+    mockLoadPage.mockRejectedValueOnce(new Error('Something went wrong'));
+
     // WHEN
     const { getByTestId } = render(<IntegrationComponent />);
 
-    // THEN
-    await waitFor(() => expect(getByTestId('items-count').children.join('')).toBe('1'));
-
-    // GIVEN
-    mockNext.mockResolvedValueOnce({ items: [{ id: 'b', sourceId: 's', title: 't2', url: 'u2', publishedAt: '2025-01-02' }], canLoadMore: false });
-    
-    // THEN
-    await act(async () => { getByTestId('do-load-more').props.onPress(); });
-    await waitFor(() => expect(getByTestId('items-count').children.join('')).toBe('2'));
-    expect(getByTestId('canLoadMore').children.join('')).toBe('false');
-  });
-
-  it('should capture errors from next()', async () => {
-    // GIVEN
-    mockNext.mockRejectedValueOnce(new Error('boom'));
-
-    // WHEN
-    render(<IntegrationComponent />);
+    await waitFor(() => getByTestId('error'));
 
     // THEN
-    await waitFor(() => expect(screen.getByTestId('error').children.join('')).toBe('boom'));
+    expect(getByTestId('error').props.children).toBe('Something went wrong');
   });
 });
