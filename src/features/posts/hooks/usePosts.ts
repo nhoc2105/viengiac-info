@@ -13,7 +13,8 @@ export function usePosts() {
 
   const load = useCallback(async (replace = false) => {
     setLoading(true);
-    setError(null);    
+    setError(null);
+
     try {
           const { items: nextItems, canLoadMore } = await providerRef.current.loadPage(1, PAGE_SIZE);
           setItems(prev => (replace ? nextItems : [...prev, ...nextItems]));
@@ -22,17 +23,17 @@ export function usePosts() {
           setError(e?.message ?? "Failed to load posts");
         } finally {
           setLoading(false);
-          if (refreshing) setRefreshing(false);
         }
       }, [refreshing]);
 
 
-  const refresh = useCallback(() => {
+  const refresh = useCallback(async () => {
     providerRef.current = createFirebaseProvider(); // reset pagination
     setRefreshing(true);
     setItems([]);
     setCanLoadMore(true);
-    load(true);
+    await load(true);
+    setRefreshing(false);
   }, [load]);
 
 

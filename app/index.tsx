@@ -24,7 +24,11 @@ export default function HomeScreen() {
         data={items}
         keyExtractor={(a) => String(a.id)}
         renderItem={({ item }) => <PostItem post={item} />}
-        refreshControl={<RefreshControl refreshing={refreshing} onRefresh={refresh} />}
+        refreshControl={
+          <RefreshControl 
+            refreshing={refreshing} 
+            onRefresh={refresh} />
+        }
         contentContainerStyle={{ paddingBottom: 28 }}
         ItemSeparatorComponent={() => (
           <Divider style={{ opacity: 0.5 }} />

@@ -16,7 +16,8 @@
         "foregroundImage": "./assets/images/adaptive-icon.png",
         "backgroundColor": "#ffffff"
       },
-      "edgeToEdgeEnabled": true
+      "edgeToEdgeEnabled": true,
+      "package": "com.hiladostudio.viengiacinfo"
     },
     "web": {
       "bundler": "metro",
@@ -36,7 +37,14 @@
       ]
     ],
     "experiments": {
+      "reactCanary": true,
       "typedRoutes": true
+    },
+    "extra": {
+      "router": {},
+      "eas": {
+        "projectId": "703bb22e-ca5e-4a15-8ca2-82ec9b712fd7"
+      }
     }
   }
 }

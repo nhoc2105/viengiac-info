@@ -2,7 +2,7 @@ import type { Post } from '@/src/features/posts/post.types';
 import { timeAgo } from '@/src/utils/date-time.utils';
 import { decodeHtmlEntities } from '@/src/utils/html.utils';
 import React, { useMemo } from 'react';
-import { Image, Linking, Platform } from 'react-native';
+import { Image, Linking } from 'react-native';
 import { List, Surface, Text, useTheme } from 'react-native-paper';
 
 const COVER_SIZE = { width: 112, height: 88 } as const;
@@ -21,14 +21,14 @@ export default function PostItem({ post }: { post: Post }) {
       accessibilityRole="button"
       accessibilityLabel={title}
       contentStyle={{ justifyContent: 'space-between' }}
-      title={<Text variant="bodyLarge">{title}</Text>}
+      title={<Text variant="titleMedium" style={{ lineHeight: 22 }}>{title}</Text>}
       titleNumberOfLines={3}
-      titleStyle={[Platform.OS === 'android' ? { marginTop: -5 } : null]}
+      titleStyle={{ marginTop: -4 }}
       description={() => (
         <Text
-          variant="bodySmall"
+          variant="labelMedium"
           numberOfLines={1}
-          style={{ color: theme.colors.onSurfaceVariant }}
+          style={{ color: theme.colors.onSurfaceVariant, opacity: 0.7 }}
           accessibilityLabel={meta}
         >
           {meta}
