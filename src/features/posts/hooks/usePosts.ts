@@ -24,7 +24,7 @@ export function usePosts() {
         } finally {
           setLoading(false);
         }
-      }, [refreshing]);
+      }, []);
 
 
   const refresh = useCallback(async () => {
@@ -33,7 +33,6 @@ export function usePosts() {
     setItems([]);
     setCanLoadMore(true);
     await load(true);
-    setRefreshing(false);
   }, [load]);
 
 
