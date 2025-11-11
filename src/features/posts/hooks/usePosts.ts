@@ -33,6 +33,7 @@ export function usePosts() {
     setItems([]);
     setCanLoadMore(true);
     await load(true);
+    setRefreshing(false);
   }, [load]);
 
 

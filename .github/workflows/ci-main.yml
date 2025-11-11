@@ -4,7 +4,8 @@ on:
   pull_request:
   push:
     branches:        
-      - '**'    # all branches
+      - master
+      - 'release/**'
 
 # Cancel outdated runs on the same branch/PR to save minutes
 concurrency:
