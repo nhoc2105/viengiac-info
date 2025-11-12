@@ -1,19 +1,18 @@
-// app/index.tsx
 import React from 'react';
 import { FlatList, RefreshControl, View } from 'react-native';
-import { Banner, Divider, useTheme } from 'react-native-paper';
+import { ActivityIndicator, Banner, Divider, useTheme } from 'react-native-paper';
 
 import EmptyView from '@/src/components/empty/EmptyView';
-import LoadingFooter from '@/src/components/loading-footer/LoadingFooter';
 import PostItem from '@/src/features/posts/PostItem';
 import { usePosts } from '@/src/features/posts/hooks/usePosts';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 export default function HomeScreen() {
   const { items, loading, error, refreshing, canLoadMore, refresh, loadMore } = usePosts();
   const theme = useTheme();
 
   return (
-    <View style={{ flex: 1, backgroundColor: theme.colors.background }}>
+    <SafeAreaView edges={['top', 'bottom']} style={{ flex: 1, backgroundColor: theme.colors.background }}>
       {Boolean(error) && (
         <Banner visible icon="alert-circle" style={{ marginHorizontal: 12, marginTop: 8 }}>
           {error}
@@ -27,20 +26,34 @@ export default function HomeScreen() {
         refreshControl={
           <RefreshControl 
             refreshing={refreshing} 
-            onRefresh={refresh} />
+            onRefresh={refresh} 
+            colors={[theme.colors.primary]}            // Android spinner color(s)
+            tintColor={theme.colors.primary}           // iOS spinner color
+            progressBackgroundColor={theme.colors.surface} />
         }
-        contentContainerStyle={{ paddingBottom: 28 }}
         ItemSeparatorComponent={() => (
-          <Divider style={{ opacity: 0.5 }} />
+          <Divider />
         )}
         ListEmptyComponent={!loading && !error ? <EmptyView /> : null}
-        ListFooterComponent={
-          <View style={{ marginTop: 4, paddingHorizontal: 8 }}>
-            <Divider style={{ opacity: 0.4 }} />
-            <LoadingFooter loading={loading} canLoadMore={canLoadMore} onLoadMore={loadMore} />
-          </View>
-        }
+        ListFooterComponent={() =>
+          (!refreshing) ? (
+            <View style={{ 
+              height: 60, 
+              justifyContent: 'center', 
+              alignItems: 'center',
+              backgroundColor: theme.colors.surface
+            }}>
+              <ActivityIndicator size="small" />
+            </View>
+          ) : null
+       }
+        onEndReached={() => {
+          if (!loading && canLoadMore) {
+            loadMore();
+          }
+        }}
+        onEndReachedThreshold={0.5}
       />
-    </View>
+    </SafeAreaView>
   );
 }
