@@ -36,13 +36,13 @@ export default function PostList() {
             height: 72,
             justifyContent: 'center',
             alignItems: 'center',
-            backgroundColor: theme.colors.primaryContainer,
+            backgroundColor: theme.colors.onTertiary,
           }}
         >
           <ActivityIndicator size="small" testID="ActivityIndicator"/>
         </View>
       ) : null,
-    [refreshing, theme.colors.primaryContainer]
+    [refreshing, theme.colors.onTertiary]
   );
   const listEmpty = useMemo(() => (!loading && !error ? <EmptyView /> : null), [loading, error]);
   const ItemSeparatorComponent = useCallback(() => <Divider />, []);

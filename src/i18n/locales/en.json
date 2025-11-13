@@ -1,0 +1,21 @@
+{
+  "empty_title": "No posts.",
+  "error_title": "Something went wrong",
+  "load_more": "Load more",
+  "end_text": "— End —",
+  "organizations": {
+    "GDPTDQ": "GĐPT Đức Quốc",
+    "VG": "Viên Giác Pagoda",
+    "VL": "Viên Lạc Retreat Center",
+    "VLTDE": "Amitayus Monastery",
+    "VLTVI": "Amitayus Monastery"
+  },
+  "time": {
+    "seconds": "sec",
+    "minutes": "min",
+    "hours": "hr",
+    "days": "d",
+    "months": "m",
+    "years": "yr"
+  }
+}

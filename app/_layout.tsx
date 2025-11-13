@@ -2,7 +2,7 @@
 import { paperTheme } from '@/src/theme/paper';
 import React from 'react';
 import { PaperProvider } from 'react-native-paper';
-import HomeScreen from '.';
+import HomeScreen from './HomeScreen';
 
 // Root layout (global providers / theme would go here)
 export default function RootLayout() {

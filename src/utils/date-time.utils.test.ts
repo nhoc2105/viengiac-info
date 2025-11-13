@@ -1,8 +1,10 @@
+import i18n from '@/src/i18n';
 import { timeAgo } from '@/src/utils/date-time.utils';
 
 describe('timeAgo', () => {
   const base = new Date('2024-01-01T12:00:00Z').getTime();
   beforeAll(() => {
+    i18n.changeLanguage('vi');
     jest.useFakeTimers();
     jest.setSystemTime(base);
   });
