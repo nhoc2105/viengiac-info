@@ -1,3 +1,4 @@
+import i18n from '@/src/i18n';
 import { paperTheme } from '@/src/theme/paper';
 import { render, screen, waitFor } from '@testing-library/react-native';
 import React, { act } from 'react';
@@ -19,6 +20,10 @@ const post: Post = {
 };
 
 describe('PostItem', () => {
+  beforeAll(() => {
+    i18n.changeLanguage('vi');
+  });
+
   it('should render post', async () => {
     // GIVEN
 
@@ -30,7 +35,7 @@ describe('PostItem', () => {
     // THEN
     await waitFor(() => {
       expect(screen.getByText('Hello & <em>world</em>')).toBeTruthy();
-      expect(screen.getByText('VG · 5m ago')).toBeTruthy();
+      expect(screen.getByText('Chùa Viên Giác · 5m ago')).toBeTruthy();
     });
   });
 

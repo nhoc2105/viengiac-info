@@ -1,6 +1,7 @@
 import type { Post } from '@/src/features/posts/post.types';
 import { timeAgo } from '@/src/utils/date-time.utils';
 import { decodeHtmlEntities } from '@/src/utils/html.utils';
+import { t } from 'i18next';
 import React, { useMemo } from 'react';
 import { Image } from 'react-native';
 import { List, Surface, Text, useTheme } from 'react-native-paper';
@@ -12,7 +13,8 @@ function PostItem({ post }: { post: Post }) {
   const theme = useTheme();
   const title = useMemo(() => decodeHtmlEntities(post.title ?? ''), [post.title]);
   const elapsed = timeAgo(post.publishedAt);
-  const meta = [post.sourceId, elapsed].filter(Boolean).join(' · ');
+  const sourceName = t(`organizations.${post.sourceId}`);
+  const meta = [sourceName, elapsed].filter(Boolean).join(' · ');
 
   return (
     <List.Item
@@ -26,7 +28,7 @@ function PostItem({ post }: { post: Post }) {
         <Text
           variant="labelMedium"
           numberOfLines={1}
-          style={{ color: theme.colors.onSurfaceVariant, opacity: 0.7 }}
+          style={{ color: theme.colors.onSurface, opacity: 0.6, letterSpacing: 0.4 }}
           accessibilityLabel={meta}
         >
           {meta}

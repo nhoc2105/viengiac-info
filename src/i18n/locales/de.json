@@ -1,0 +1,21 @@
+{
+  "empty_title": "Keine Beiträge vorhanden.",
+  "error_title": "Etwas ist schief gelaufen",
+  "load_more": "Mehr laden",
+  "end_text": "— Ende —",
+  "organizations": {
+    "GDPTDQ": "GĐPT Đức Quốc",
+    "VG": "Pagode Viên Giác",
+    "VL": "Viên Lạc Retreat Center",
+    "VLTDE": "Amitayus Kloster",
+    "VLTVI": "Amitayus Kloster"
+  },
+  "time": {
+    "seconds": "Sek",
+    "minutes": "Min",
+    "hours": "Std",
+    "days": "T",
+    "months": "Mon",
+    "years": "J"
+  }
+}

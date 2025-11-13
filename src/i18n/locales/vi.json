@@ -1,0 +1,21 @@
+{
+  "empty_title": "Chưa có bài viết.",
+  "error_title": "Có lỗi xảy ra",
+  "load_more": "Tải thêm",
+  "end_text": "— Hết —",
+  "organizations": {
+    "GDPTDQ": "GĐPT Đức Quốc",
+    "VG": "Chùa Viên Giác",
+    "VL": "Tu Viện Viên Lạc",
+    "VLTDE": "Tu Viện Vô Lượng Thọ",
+    "VLTVI": "Tu Viện Vô Lượng Thọ"
+  },
+  "time": {
+    "seconds": "giây",
+    "minutes": "phút",
+    "hours": "giờ",
+    "days": "ngày",
+    "months": "tháng",
+    "years": "năm"
+  }
+}
