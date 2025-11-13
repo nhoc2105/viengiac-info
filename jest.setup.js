@@ -11,3 +11,6 @@ jest.mock('expo-router', () => ({ Stack: () => null }));
 import { Linking } from 'react-native';
 jest.spyOn(Linking, 'openURL').mockImplementation(async () => true);
 
+// Polyfill setImmediate for React Native
+global.setImmediate = global.setImmediate || ((fn, ...args) => setTimeout(fn, 0));
+

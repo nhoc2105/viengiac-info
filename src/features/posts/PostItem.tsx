@@ -2,22 +2,20 @@ import type { Post } from '@/src/features/posts/post.types';
 import { timeAgo } from '@/src/utils/date-time.utils';
 import { decodeHtmlEntities } from '@/src/utils/html.utils';
 import React, { useMemo } from 'react';
-import { Image, Linking } from 'react-native';
+import { Image } from 'react-native';
 import { List, Surface, Text, useTheme } from 'react-native-paper';
 
 const COVER_SIZE = { width: 112, height: 88 } as const;
 
-/** UI component for rendering a Post. */
-export default function PostItem({ post }: { post: Post }) {
+/** UI component for rendering a Post Item. */
+function PostItem({ post }: { post: Post }) {
   const theme = useTheme();
   const title = useMemo(() => decodeHtmlEntities(post.title ?? ''), [post.title]);
   const elapsed = timeAgo(post.publishedAt);
   const meta = [post.sourceId, elapsed].filter(Boolean).join(' · ');
-  const open = () => Linking.openURL(post.url);
 
   return (
     <List.Item
-      onPress={open}
       accessibilityRole="button"
       accessibilityLabel={title}
       contentStyle={{ justifyContent: 'space-between' }}
@@ -43,7 +41,7 @@ export default function PostItem({ post }: { post: Post }) {
             source={{ uri: post.imageUrl }}
             resizeMode="cover"
             style={[
-              props.style as any,
+              props.style,
               {
                 width: COVER_SIZE.width,
                 height: COVER_SIZE.height,
@@ -79,3 +77,14 @@ export default function PostItem({ post }: { post: Post }) {
     />
   );
 }
+
+export default React.memo(
+  PostItem,
+  (prev, next) =>
+    prev.post.id === next.post.id &&
+    prev.post.title === next.post.title &&
+    prev.post.imageUrl === next.post.imageUrl &&
+    prev.post.publishedAt === next.post.publishedAt &&
+    prev.post.sourceId === next.post.sourceId &&
+    prev.post.url === next.post.url
+);
