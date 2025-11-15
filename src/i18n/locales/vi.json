@@ -1,6 +1,27 @@
 {
+  "button": {
+    "quit": "Thoát",
+    "retry": "Thử lại"
+  },
+  "components": {
+    "basic": {
+      "empty-view": {
+        "title": "Chưa có bài viết."
+      }
+    }
+  },
   "empty_title": "Chưa có bài viết.",
   "error_title": "Có lỗi xảy ra",
+  "error": {
+    "network": {
+      "title": "Không có Internet",
+      "message": "Vui lòng kiểm tra kết nối mạng và thử lại."
+    },
+    "server": {
+      "title": "Không tải được bài viết",
+      "message": "Xin lỗi, máy chủ đang gặp sự cố. Chúng tôi đã ghi nhận và đang khắc phục."
+    }
+  },
   "load_more": "Tải thêm",
   "end_text": "— Hết —",
   "organizations": {

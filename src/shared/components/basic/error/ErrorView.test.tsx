@@ -1,4 +1,4 @@
-import ErrorView from '@/src/components/error/ErrorView';
+import ErrorView from '@/src/shared/components/basic/error/ErrorView';
 import { paperTheme } from '@/src/theme/paper';
 import { render, waitFor } from '@testing-library/react-native';
 import React from 'react';

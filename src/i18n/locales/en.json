@@ -1,6 +1,27 @@
 {
+  "button": {
+    "quit": "Quit",
+    "retry": "Retry"
+  },
+  "components": {
+    "basic": {
+      "empty-view": {
+        "title": "No posts yet."
+      }
+    }
+  },
   "empty_title": "No posts.",
   "error_title": "Something went wrong",
+  "error": {
+    "network": {
+      "title": "No internet connection",
+      "message": "Please check your network connection and try again."
+    },
+    "server": {
+      "title": "Unable to load articles",
+      "message": "Sorry, the server is experiencing issues. We’ve noted the problem and are working to fix it."
+    }
+  },
   "load_more": "Load more",
   "end_text": "— End —",
   "organizations": {

@@ -1,4 +1,4 @@
-import EmptyView from '@/src/components/empty/EmptyView';
+import EmptyView from '@/src/shared/components/basic/empty/EmptyView';
 import { paperTheme } from '@/src/theme/paper';
 import { render, waitFor } from '@testing-library/react-native';
 import React from 'react';

@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 import SkeletonShimmer from '@/src/components/skeleton-shimmer/SkeletonShimmer';
+=======
+import SkeletonShimmer from '@/src/shared/components/basic/skeleton-shimmer/SkeletonShimmer';
+>>>>>>> 1de0d12 (Add dialog for server error and internet connection. Restructure project files)
 import React from 'react';
 import { View } from 'react-native';
 import { useTheme } from 'react-native-paper';

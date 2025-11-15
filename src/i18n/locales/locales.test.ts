@@ -13,14 +13,22 @@ function getKeys(obj: Record<string, any>, prefix = ''): string[] {
 }
 
 describe('Translation keys consistency', () => {
-  it('en, de, and vi should have the same keys', () => {
+  it('de should match en', () => {
     // GIVEN
     const enKeys = getKeys(en).sort();
     const deKeys = getKeys(de).sort();
-    const viKeys = getKeys(vi).sort();
 
     // THEN
     expect(deKeys).toEqual(enKeys);
+  });
+
+  it('vi should match en', () => {
+    // GIVEN
+    const enKeys = getKeys(en).sort();
+    const viKeys = getKeys(vi).sort();
+
+    // THEN
     expect(viKeys).toEqual(enKeys);
   });
+
 });
