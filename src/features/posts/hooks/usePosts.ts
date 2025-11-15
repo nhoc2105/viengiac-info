@@ -6,7 +6,7 @@ import { Post } from "../post.types";
 export function usePosts() {
   const providerRef = useRef(createFirebaseProvider());
   const [items, setItems] = useState<Post[]>([]);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [canLoadMore, setCanLoadMore] = useState(true);
@@ -43,7 +43,7 @@ export function usePosts() {
 
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  useEffect(() => { refresh(); }, []);
+  useEffect(() => { load(); }, []);
 
   return { items, loading, error, refreshing, canLoadMore, refresh, loadMore };
 }

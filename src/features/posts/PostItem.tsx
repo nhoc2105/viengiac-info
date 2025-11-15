@@ -6,7 +6,7 @@ import React, { useMemo } from 'react';
 import { Image } from 'react-native';
 import { List, Surface, Text, useTheme } from 'react-native-paper';
 
-const COVER_SIZE = { width: 112, height: 88 } as const;
+export const COVER_SIZE = { width: 112, height: 88 } as const;
 
 /** UI component for rendering a Post Item. */
 function PostItem({ post }: { post: Post }) {
