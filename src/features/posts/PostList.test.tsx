@@ -5,6 +5,13 @@ import PostList from './PostList';
 
 jest.mock('@/src/features/posts/hooks/usePosts');
 
+jest.mock('./PostItemSkeleton', () => {
+  // eslint-disable-next-line @typescript-eslint/no-require-imports
+  const { View } = require('react-native');
+  // eslint-disable-next-line react/display-name
+  return () => <View testID="MockSkeleton" />;
+});
+
 describe('PostList Component', () => {
   const mockRefresh = jest.fn();
   const mockLoadMore = jest.fn();
@@ -26,10 +33,11 @@ describe('PostList Component', () => {
     });
 
     // WHEN component renders
-    const { getByTestId } = render(<PostList />);
+    const { getByTestId, getAllByTestId } = render(<PostList />);
 
-    // THEN loading indicator should be visible
-    expect(getByTestId('ActivityIndicator')).toBeTruthy();
+    // THEN skeleton loader should be visible
+    expect(getByTestId('SkeletonLoader')).toBeTruthy();
+    expect(getAllByTestId('MockSkeleton').length).toBeGreaterThan(0);
   });
 
   test('should display list items when posts exist', () => {

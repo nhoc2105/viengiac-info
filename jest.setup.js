@@ -14,3 +14,7 @@ jest.spyOn(Linking, 'openURL').mockImplementation(async () => true);
 // Polyfill setImmediate for React Native
 global.setImmediate = global.setImmediate || ((fn, ...args) => setTimeout(fn, 0));
 
+
+// Prevent animation warnings
+jest.mock('react-native/src/private/animated/NativeAnimatedHelper');
+

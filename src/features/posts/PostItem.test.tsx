@@ -6,8 +6,6 @@ import { PaperProvider } from 'react-native-paper';
 import PostItem from './PostItem';
 import { Post } from './post.types';
 
-jest.mock('@/src/utils/date-time.utils', () => ({ timeAgo: () => '5m ago' }));
-
 const post: Post = {
   id: '1',
   sourceId: 'VG',
@@ -35,7 +33,7 @@ describe('PostItem', () => {
     // THEN
     await waitFor(() => {
       expect(screen.getByText('Hello & <em>world</em>')).toBeTruthy();
-      expect(screen.getByText('Chùa Viên Giác · 5m ago')).toBeTruthy();
+      expect(screen.getByText('Tổ Đình Viên Giác · 10 tháng')).toBeTruthy();
     });
   });
 
