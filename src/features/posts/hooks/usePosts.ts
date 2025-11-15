@@ -14,7 +14,7 @@ export function usePosts() {
   const load = useCallback(async (replace = false) => {
     setLoading(true);
     setError(null);
-
+    
     try {
           const { items: nextItems, canLoadMore } = await providerRef.current.loadPage(1, PAGE_SIZE);
           setItems(prev => (replace ? nextItems : [...prev, ...nextItems]));

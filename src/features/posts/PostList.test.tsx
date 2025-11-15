@@ -1,9 +1,25 @@
 import { usePosts } from '@/src/features/posts/hooks/usePosts';
+import useNetworkStatus from '@/src/shared/hooks/useNetworkStatus';
 import { fireEvent, render, waitFor } from '@testing-library/react-native';
 import React from 'react';
 import PostList from './PostList';
 
 jest.mock('@/src/features/posts/hooks/usePosts');
+jest.mock('@/src/shared/hooks/useNetworkStatus');
+jest.mock('./PostItemSkeleton', () => {
+  // eslint-disable-next-line @typescript-eslint/no-require-imports
+  const { View } = require('react-native');
+  // eslint-disable-next-line react/display-name
+  return () => <View testID="MockSkeleton" />;
+});
+jest.mock('@/src/shared/components/basic/simple-dialog/SimpleDialog', () => {
+  return ({ title }: { title: string }) => {
+    // eslint-disable-next-line @typescript-eslint/no-require-imports
+    const { View } = require('react-native');
+    // eslint-disable-next-line react/display-name
+    return <View testID={`MockDialog-${title}`} />;
+  };
+});
 
 jest.mock('./PostItemSkeleton', () => {
   // eslint-disable-next-line @typescript-eslint/no-require-imports
@@ -18,9 +34,10 @@ describe('PostList Component', () => {
 
   beforeEach(() => {
     jest.clearAllMocks();
+    (useNetworkStatus as jest.Mock).mockReturnValue(true);
   });
 
-  test('should show loading indicator when posts are loading', () => {
+  test('should show loading skeleton when posts are loading', () => {
     // GIVEN posts are loading
     (usePosts as jest.Mock).mockReturnValue({
       items: [],
@@ -59,7 +76,7 @@ describe('PostList Component', () => {
     expect(getByText('Post 1')).toBeTruthy();
   });
 
-  test('should show error banner when error exists', () => {
+  test('should show error banner when error exists', async () => {
     // GIVEN error exists
     (usePosts as jest.Mock).mockReturnValue({
       items: [],
@@ -70,12 +87,16 @@ describe('PostList Component', () => {
       refresh: mockRefresh,
       loadMore: mockLoadMore,
     });
+    (useNetworkStatus as jest.Mock).mockReturnValue(true);
 
     // WHEN component renders
-    const { getByText } = render(<PostList />);
+    const { getByTestId, queryByTestId } = render(<PostList />);
 
     // THEN error message should be visible
-    expect(getByText('Something went wrong')).toBeTruthy();
+    await waitFor(() => {
+      expect(getByTestId('MockDialog-Unable to load articles')).toBeTruthy();
+      expect(queryByTestId('MockDialog-No internet connection')).toBeFalsy();
+    });
   });
 
   test('should call loadMore when onEndReached triggers and canLoadMore is true', async () => {
@@ -97,5 +118,28 @@ describe('PostList Component', () => {
 
     // THEN loadMore should be called
     await waitFor(() => expect(mockLoadMore).toHaveBeenCalled());
+  });
+
+  it('should show network dialog when offline', async () => {
+    // GIVEN
+    (usePosts as jest.Mock).mockReturnValue({
+      items: [],
+      loading: false,
+      error: null,
+      refreshing: false,
+      canLoadMore: false,
+      refresh: mockRefresh,
+      loadMore: mockLoadMore,
+    });
+    (useNetworkStatus as jest.Mock).mockReturnValue(false);
+
+    // WHEN
+    const { getByTestId, queryByTestId } = render(<PostList />);
+
+    // THEN
+    await waitFor(() => {
+      expect(queryByTestId('MockDialog-Unable to load articles')).toBeFalsy();
+      expect(getByTestId('MockDialog-No internet connection')).toBeTruthy();
+    });
   });
 });
