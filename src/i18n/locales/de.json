@@ -10,8 +10,6 @@
       }
     }
   },
-  "empty_title": "Keine Beiträge vorhanden.",
-  "error_title": "Etwas ist schief gelaufen",
   "error": {
     "network": {
       "title": "Keine Internetverbindung",
@@ -22,8 +20,11 @@
       "message": "Entschuldigung, der Server hat ein Problem. Wir arbeiten an einer Lösung."
     }
   },
-  "load_more": "Mehr laden",
-  "end_text": "— Ende —",
+  "features": {
+    "post-list": {
+      "no-more-posts": "Ende."
+    }
+  },
   "organizations": {
     "GDPTDQ": "GĐPT Đức Quốc",
     "VG": "Pagode Viên Giác",

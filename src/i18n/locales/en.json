@@ -10,8 +10,6 @@
       }
     }
   },
-  "empty_title": "No posts.",
-  "error_title": "Something went wrong",
   "error": {
     "network": {
       "title": "No internet connection",
@@ -22,8 +20,11 @@
       "message": "Sorry, the server is experiencing issues. We’ve noted the problem and are working to fix it."
     }
   },
-  "load_more": "Load more",
-  "end_text": "— End —",
+  "features": {
+    "post-list": {
+      "no-more-posts": "— End —"
+    }
+  },
   "organizations": {
     "GDPTDQ": "GĐPT Đức Quốc",
     "VG": "Viên Giác Pagoda",

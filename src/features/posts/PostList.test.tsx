@@ -1,7 +1,8 @@
 import { usePosts } from '@/src/features/posts/hooks/usePosts';
 import useNetworkStatus from '@/src/shared/hooks/useNetworkStatus';
-import { fireEvent, render, waitFor } from '@testing-library/react-native';
+import { fireEvent, render, RenderAPI, screen, waitFor } from '@testing-library/react-native';
 import React from 'react';
+import { PaperProvider } from 'react-native-paper';
 import PostList from './PostList';
 
 jest.mock('@/src/features/posts/hooks/usePosts');
@@ -12,28 +13,27 @@ jest.mock('./PostItemSkeleton', () => {
   // eslint-disable-next-line react/display-name
   return () => <View testID="MockSkeleton" />;
 });
-jest.mock('@/src/shared/components/basic/simple-dialog/SimpleDialog', () => {
-  return ({ title }: { title: string }) => {
-    // eslint-disable-next-line @typescript-eslint/no-require-imports
-    const { View } = require('react-native');
-    // eslint-disable-next-line react/display-name
-    return <View testID={`MockDialog-${title}`} />;
-  };
-});
 
-jest.mock('./PostItemSkeleton', () => {
-  // eslint-disable-next-line @typescript-eslint/no-require-imports
-  const { View } = require('react-native');
-  // eslint-disable-next-line react/display-name
-  return () => <View testID="MockSkeleton" />;
+jest.mock('react-native-paper', () => {
+  const actualPaper = jest.requireActual('react-native-paper');
+  return {
+    ...actualPaper,
+    ActivityIndicator: (props: any) => <div {...props}>Mocked ActivityIndicator</div>,
+  };
 });
 
 describe('PostList Component', () => {
   const mockRefresh = jest.fn();
   const mockLoadMore = jest.fn();
 
+  const renderPostList = (): RenderAPI =>
+    render(
+      <PaperProvider>
+        <PostList />
+      </PaperProvider>
+    );
+
   beforeEach(() => {
-    jest.clearAllMocks();
     (useNetworkStatus as jest.Mock).mockReturnValue(true);
   });
 
@@ -50,30 +50,33 @@ describe('PostList Component', () => {
     });
 
     // WHEN component renders
-    const { getByTestId, getAllByTestId } = render(<PostList />);
+    const { getByTestId, getAllByTestId } = renderPostList();
 
     // THEN skeleton loader should be visible
     expect(getByTestId('SkeletonLoader')).toBeTruthy();
     expect(getAllByTestId('MockSkeleton').length).toBeGreaterThan(0);
   });
 
-  test('should display list items when posts exist', () => {
+  test('should display list items when posts exist', async () => {
     // GIVEN posts exist
     (usePosts as jest.Mock).mockReturnValue({
       items: [{ id: 1, title: 'Post 1' }],
       loading: false,
       error: null,
       refreshing: false,
-      canLoadMore: true,
+      canLoadMore: false,
       refresh: mockRefresh,
       loadMore: mockLoadMore,
     });
 
     // WHEN component renders
-    const { getByText } = render(<PostList />);
+    render(<PostList />);
 
     // THEN post title should be visible
-    expect(getByText('Post 1')).toBeTruthy();
+    await waitFor(() => {
+      expect(screen.getByText('Post 1')).toBeTruthy();
+
+    });
   });
 
   test('should show error banner when error exists', async () => {
@@ -90,12 +93,12 @@ describe('PostList Component', () => {
     (useNetworkStatus as jest.Mock).mockReturnValue(true);
 
     // WHEN component renders
-    const { getByTestId, queryByTestId } = render(<PostList />);
+    const { getByTestId, queryByTestId } = renderPostList();
 
     // THEN error message should be visible
     await waitFor(() => {
-      expect(getByTestId('MockDialog-Unable to load articles')).toBeTruthy();
-      expect(queryByTestId('MockDialog-No internet connection')).toBeFalsy();
+      expect(getByTestId('DialogError')).toBeTruthy();
+      expect(queryByTestId('DialogNoInternet')).toBeFalsy();
     });
   });
 
@@ -112,7 +115,7 @@ describe('PostList Component', () => {
     });
 
     // WHEN onEndReached is fired
-    const { getByTestId } = render(<PostList />);
+    const { getByTestId } = renderPostList();
     const flatList = getByTestId('FlatList');
     fireEvent(flatList, 'onEndReached');
 
@@ -134,12 +137,12 @@ describe('PostList Component', () => {
     (useNetworkStatus as jest.Mock).mockReturnValue(false);
 
     // WHEN
-    const { getByTestId, queryByTestId } = render(<PostList />);
+    const { getByTestId, queryByTestId } = renderPostList();
 
     // THEN
     await waitFor(() => {
-      expect(queryByTestId('MockDialog-Unable to load articles')).toBeFalsy();
-      expect(getByTestId('MockDialog-No internet connection')).toBeTruthy();
+      expect(queryByTestId('DialogError')).toBeFalsy();
+      expect(getByTestId('DialogNoInternet')).toBeTruthy();
     });
   });
 });

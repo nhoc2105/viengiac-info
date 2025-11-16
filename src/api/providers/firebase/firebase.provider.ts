@@ -5,6 +5,8 @@ import { LoadPageResult, PostProvider } from '../post-provider.types';
 import { mapFirebasePost } from './firebase-post.mapper';
 import { FirebasePost } from './firebase-post.type';
 
+const FIREBASE_POST_COLLECTION = 'posts';
+
 export function createFirebaseProvider(): PostProvider {
   let lastVisible: any = null;
 
@@ -12,19 +14,26 @@ export function createFirebaseProvider(): PostProvider {
     id: 'firebase:posts',
     label: 'Firebase Posts',
     async loadPage(_page: number, pageSize: number): Promise<LoadPageResult> {
-      let postQuery = query(collection(firebaseDb, 'posts'), orderBy('modifiedGmt', 'desc'), limit(pageSize));
-      if (lastVisible) {
-        postQuery = query(postQuery, startAfter(lastVisible));
+      try {
+        let postQuery = query(
+          collection(firebaseDb, FIREBASE_POST_COLLECTION),
+          orderBy('modifiedGmt', 'desc'),
+          limit(pageSize)
+        );
+        if (lastVisible) {
+          postQuery = query(postQuery, startAfter(lastVisible));
+        }
+        const snapshot = await getDocs(postQuery);
+        const items: Post[] = snapshot.docs.map(doc => mapFirebasePost(doc.data() as FirebasePost));
+        lastVisible = snapshot.docs[snapshot.docs.length - 1];
+
+        return {
+          items,
+          canLoadMore: snapshot.docs.length === pageSize,
+        };
+      } catch (error: any) {
+        throw error;
       }
-
-      const snapshot = await getDocs(postQuery);
-      const items: Post[] = snapshot.docs.map(doc => mapFirebasePost(doc.data() as FirebasePost));
-      lastVisible = snapshot.docs[snapshot.docs.length - 1];
-
-      return {
-        items,
-        canLoadMore: snapshot.docs.length === pageSize,
-      };
     },
   };
 }

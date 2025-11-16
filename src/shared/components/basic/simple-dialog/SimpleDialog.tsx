@@ -3,6 +3,7 @@ import { Button, Dialog, Portal, Text } from 'react-native-paper';
 import { IconSource } from 'react-native-paper/lib/typescript/components/Icon';
 
 interface SimpleDialogProps {
+  testID?: string;
   visible: boolean;
   title: string;
   message: string;
@@ -14,10 +15,11 @@ interface SimpleDialogProps {
 }
 
 export default function SimpleDialog({
+  testID,
   visible,
   title,
   message,
-  icon = 'information-slab-box-outline',
+  icon = 'information',
   primaryLabel,
   secondaryLabel,
   onPrimaryAction,
@@ -25,7 +27,7 @@ export default function SimpleDialog({
 }: SimpleDialogProps) {
   return (
     <Portal>
-      <Dialog visible={visible} onDismiss={onSecondaryAction}>
+      <Dialog visible={visible} onDismiss={onSecondaryAction} testID={testID}>
         <Dialog.Icon icon={icon} />
         <Dialog.Title style={{ textAlign: 'center' }}>{title}</Dialog.Title>
         <Dialog.Content>
