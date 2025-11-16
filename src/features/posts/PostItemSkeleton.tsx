@@ -5,12 +5,12 @@ import { useTheme } from 'react-native-paper';
 
 const COVER_SIZE = { width: 112, height: 88 };
 
-export default function PostItemSkeleton() {
+export default function PostItemSkeleton({ testID }: { testID: string }) {
   const shimmerColor = useTheme().colors.outlineVariant;
   const shimmerHighlightColor = useTheme().colors.surfaceVariant;
 
   return (
-    <View>
+    <View testID={testID}>
       <View style={{ flexDirection: 'row', padding: 16 }}>
         {/* Cover image */}
         <SkeletonShimmer
@@ -24,7 +24,7 @@ export default function PostItemSkeleton() {
         />
 
         <View style={{ flex: 1, marginLeft: 12, height: COVER_SIZE.height, justifyContent: 'space-between' }}>
-          {/* Post title */}  
+          {/* Post title */}
           <SkeletonShimmer
             style={{
               height: COVER_SIZE.height * 0.6,

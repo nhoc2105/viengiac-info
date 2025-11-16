@@ -3,12 +3,14 @@ import React, { useEffect, useRef } from 'react';
 import { Animated, StyleSheet, View, ViewStyle } from 'react-native';
 
 interface SkeletonShimmerProps {
+  testID?: string;
   style?: ViewStyle;
   shimmerBaseColor?: string;      // Background color
   shimmerHighlightColor?: string; // Gradient highlight color
 }
 
 export default function SkeletonShimmer({
+  testID,
   style,
   shimmerBaseColor = '#E0E0E0',
   shimmerHighlightColor = '#F5F5F5', // lighter highlight
@@ -31,7 +33,7 @@ export default function SkeletonShimmer({
   });
 
   return (
-    <View style={[style, { backgroundColor: shimmerBaseColor, overflow: 'hidden' }]}>
+    <View testID={testID} style={[style, { backgroundColor: shimmerBaseColor, overflow: 'hidden' }]}>
       <Animated.View
         style={{
           ...StyleSheet.absoluteFillObject,
