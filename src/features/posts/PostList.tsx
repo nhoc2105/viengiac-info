@@ -1,6 +1,6 @@
 import React, { useCallback, useMemo } from 'react';
 import { BackHandler, Dimensions, FlatList, RefreshControl, View } from 'react-native';
-import { ActivityIndicator, Divider, useTheme } from 'react-native-paper';
+import { ActivityIndicator, Divider, Text, useTheme } from 'react-native-paper';
 
 import { usePosts } from '@/src/features/posts/hooks/usePosts';
 import PostItem, { COVER_SIZE } from '@/src/features/posts/PostItem';
@@ -63,10 +63,16 @@ export default function PostList() {
             backgroundColor: theme.colors.onTertiary,
           }}
         >
-          <ActivityIndicator size="small" testID="ActivityIndicator" />
+          {
+            Boolean(canLoadMore) ? (
+              <ActivityIndicator size="small" testID="ActivityIndicator" />
+            ) : (
+              <Text>{i18n.t('features.post-list.no-more-posts')}</Text>
+            )
+          }
         </View>
       ) : null,
-    [refreshing, theme.colors.onTertiary]
+    [refreshing, items.length, theme.colors.onTertiary, canLoadMore]
   );
 
   const ItemSeparatorComponent = useCallback(() => <Divider />, []);
@@ -78,6 +84,7 @@ export default function PostList() {
       {
         Boolean(error) ? (
           <SimpleDialog
+            testID="DialogError"
             visible={Boolean(error)}
             title={i18n.t("error.server.title")}
             message={i18n.t("error.server.message")}
@@ -92,6 +99,7 @@ export default function PostList() {
       {
         Boolean(!isOnline) ? (
           <SimpleDialog
+            testID="DialogNoInternet"
             visible={!isOnline}
             title={i18n.t('error.network.title')}
             message={i18n.t('error.network.message')}
@@ -103,7 +111,6 @@ export default function PostList() {
           />
         ) : null
       }
-
 
       <FlatList
         testID="FlatList"
