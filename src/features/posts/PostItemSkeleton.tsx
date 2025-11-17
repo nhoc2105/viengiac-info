@@ -6,8 +6,8 @@ import { useTheme } from 'react-native-paper';
 const COVER_SIZE = { width: 112, height: 88 };
 
 export default function PostItemSkeleton({ testID }: { testID: string }) {
-  const shimmerColor = useTheme().colors.outlineVariant;
-  const shimmerHighlightColor = useTheme().colors.surfaceVariant;
+  const shimmerColor = useTheme().colors.background;
+  const shimmerHighlightColor = useTheme().colors.surface;
 
   return (
     <View testID={testID}>

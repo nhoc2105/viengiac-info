@@ -26,11 +26,12 @@
     }
   },
   "organizations": {
-    "GDPTDQ": "GĐPT Đức Quốc",
-    "VG": "Tổ Đình Viên Giác",
-    "VL": "Tu Viện Viên Lạc",
-    "VLTDE": "Tu Viện Vô Lượng Thọ",
-    "VLTVI": "Tu Viện Vô Lượng Thọ"
+    "GDPTDQ": "GĐPT Đức Quốc 🇩🇪",
+    "VG": "Tổ Đình Viên Giác 🇩🇪",
+    "VL": "Tu Viện Viên Lạc 🇩🇪",
+    "VLTDE": "Tu Viện Vô Lượng Thọ 🇩🇪",
+    "VLTVI": "Tu Viện Vô Lượng Thọ 🇩🇪",
+    "VM": "Chùa Viên Minh 🇨🇭"
   },
   "time": {
     "seconds": "giây",
