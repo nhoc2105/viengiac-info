@@ -40,21 +40,16 @@ jobs:
       - name: Install deps
         run: npm ci
 
-      # Generate ios/ from Expo config (CNG) so Xcode can compile
+      # Generate ios/ from Expo config so Xcode can compile
       - name: Expo prebuild (iOS)
         env:
           EXPO_NO_INTERACTIVE: '1'
         run: npx expo prebuild --platform ios --non-interactive
 
-      # Cache CocoaPods to speed up repeat builds
-      - name: Cache Pods
-        uses: actions/cache@v4
-        with:
-          path: |
-            ios/Pods
-            ~/Library/Caches/CocoaPods
-          key: ${{ runner.os }}-pods-${{ hashFiles('ios/Podfile.lock') }}
-          restore-keys: ${{ runner.os }}-pods-
+      # Clear CocoaPods cache and Pods before install
+      - name: Clear CocoaPods cache
+        run: |
+          rm -rf ios/Pods ios/Podfile.lock ~/Library/Caches/CocoaPods
 
       - name: Install CocoaPods
         working-directory: ios
@@ -70,23 +65,23 @@ jobs:
             # Find workspace
             WORKSPACE=$(find ios -maxdepth 1 -name '*.xcworkspace' -print -quit)
             if [[ -z "${WORKSPACE:-}" ]]; then
-            echo "No .xcworkspace under ios/"; exit 1
+              echo "No .xcworkspace under ios/"; exit 1
             fi
             echo "Detected iOS workspace: $WORKSPACE"
 
             # Pipe JSON into Python; print the first scheme (or empty)
             SCHEME=$(
-            xcodebuild -list -json -workspace "$WORKSPACE" |
-            /usr/bin/python3 -c "import sys,json; d=json.load(sys.stdin); w=d.get('workspace') or {}; s=w.get('schemes') or []; print(s[0] if s else '')"
+              xcodebuild -list -json -workspace "$WORKSPACE" |
+              /usr/bin/python3 -c "import sys,json; d=json.load(sys.stdin); w=d.get('workspace') or {}; s=w.get('schemes') or []; print(s[0] if s else '')"
             )
 
             if [[ -z "${SCHEME:-}" ]]; then
-            echo "No scheme found in $WORKSPACE (is the scheme Shared?)"; exit 1
+              echo "No scheme found in $WORKSPACE (is the scheme Shared?)"; exit 1
             fi
 
             {
-            echo "workspace=$WORKSPACE"
-            echo "scheme=$SCHEME"
+              echo "workspace=$WORKSPACE"
+              echo "scheme=$SCHEME"
             } >> "$GITHUB_OUTPUT"
 
             echo "Detected: $WORKSPACE / $SCHEME"
