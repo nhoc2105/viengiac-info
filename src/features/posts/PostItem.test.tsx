@@ -33,7 +33,7 @@ describe('PostItem', () => {
     // THEN
     await waitFor(() => {
       expect(screen.getByText('Hello & <em>world</em>')).toBeTruthy();
-      expect(screen.getByText('Tổ Đình Viên Giác · 10 tháng')).toBeTruthy();
+      expect(screen.getByText('Tổ Đình Viên Giác 🇩🇪 · 10 tháng')).toBeTruthy();
     });
   });
 

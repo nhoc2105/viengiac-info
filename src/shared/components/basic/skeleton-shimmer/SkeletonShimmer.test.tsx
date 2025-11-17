@@ -32,7 +32,7 @@ describe('SkeletonShimmer', () => {
         expect(getByTestId('skeleton-shimmer')).toBeTruthy();
         expect(LinearGradient).toHaveBeenCalledWith(
             expect.objectContaining({
-                colors: ['transparent', '#F5F5F5', 'transparent'],
+                colors: ['rgba(255,255,255,0)', '#F5F5F5', 'rgba(255,255,255,0)'],
             }),
             undefined
         );
@@ -51,7 +51,7 @@ describe('SkeletonShimmer', () => {
         // THEN
         expect(LinearGradient).toHaveBeenCalledWith(
             expect.objectContaining({
-                colors: ['transparent', '#EEE', 'transparent'],
+                colors: ['rgba(255,255,255,0)', '#EEE', 'rgba(255,255,255,0)'],
             }),
             undefined
         );

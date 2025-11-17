@@ -41,7 +41,7 @@ export default function SkeletonShimmer({
         }}
       >
         <LinearGradient
-          colors={['transparent', shimmerHighlightColor, 'transparent']}
+          colors={['rgba(255,255,255,0)', shimmerHighlightColor, 'rgba(255,255,255,0)']}
           start={{ x: 0, y: 0 }}
           end={{ x: 1, y: 0 }}
           style={StyleSheet.absoluteFillObject}

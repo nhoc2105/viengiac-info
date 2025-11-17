@@ -38,7 +38,6 @@
       "expo-localization"
     ],
     "experiments": {
-      "reactCanary": true,
       "typedRoutes": true
     },
     "extra": {
