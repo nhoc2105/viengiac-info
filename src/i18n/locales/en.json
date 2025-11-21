@@ -34,6 +34,10 @@
     "VM": "Viên Minh Pagoda 🇨🇭"
   },
   "time": {
+    "elapsed": {
+      "short": "{{count}} {{unit}}",
+      "long": "{{count}} {{unit}} ago"
+    },
     "seconds": "sec",
     "minutes": "min",
     "hours": "hr",

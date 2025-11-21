@@ -1,81 +1,107 @@
+
 import type { Post } from '@/src/features/posts/post.types';
-import { timeAgo } from '@/src/utils/date-time.utils';
+import { timeAgoShort } from '@/src/utils/date-time.utils';
 import { decodeHtmlEntities } from '@/src/utils/html.utils';
+import { useRouter } from 'expo-router';
 import { t } from 'i18next';
-import React, { useMemo } from 'react';
-import { Image } from 'react-native';
+import React, { useCallback, useMemo } from 'react';
+import { Image, StyleSheet } from 'react-native';
 import { List, Surface, Text, useTheme } from 'react-native-paper';
+import PostStorageService from './services/post-storage.service';
 
 export const COVER_SIZE = { width: 112, height: 88 } as const;
 
-/** UI component for rendering a Post Item. */
 function PostItem({ post }: { post: Post }) {
   const theme = useTheme();
+  const router = useRouter();
+
+  const styles = StyleSheet.create({
+    contentStyle: { justifyContent: 'space-between' },
+    title: { lineHeight: 22 },
+    titleStyle: { marginTop: -4 },
+    description: {
+      color: theme.colors.onSurface,
+      opacity: 0.6,
+      letterSpacing: 0.4
+    },
+    cover: {
+      width: COVER_SIZE.width,
+      height: COVER_SIZE.height,
+      borderRadius: 4,
+      alignSelf: 'flex-start',
+    },
+    placeholder: {
+      width: COVER_SIZE.width,
+      height: COVER_SIZE.height,
+      borderRadius: 4,
+      alignItems: 'center',
+      justifyContent: 'center',
+      alignSelf: 'flex-start',
+    },
+  });
+
+  // Derived values
   const title = useMemo(() => decodeHtmlEntities(post.title ?? ''), [post.title]);
-  const elapsed = timeAgo(post.publishedAt);
-  const sourceName = t(`organizations.${post.sourceId}`);
-  const meta = [sourceName, elapsed].filter(Boolean).join(' · ');
+  const elapsed = useMemo(() => timeAgoShort(post.publishedAt), [post.publishedAt]);
+  const sourceName = useMemo(() => t(`organizations.${post.sourceId}`), [post.sourceId]);
+  const meta = useMemo(() => [sourceName, elapsed].filter(Boolean).join(' · '), [sourceName, elapsed]);
+
+  // Stable callbacks
+  const handlePress = useCallback(() => {
+    PostStorageService.getInstance().setSelectedPost(post);
+    router.push({ pathname: '/post/details', params: { id: post.id } });
+  }, [post, router]);
+
+  const renderDescription = useCallback(
+    () => (
+      <Text
+        variant="labelMedium"
+        numberOfLines={1}
+        style={[styles.description, { color: theme.colors.onSurface }]}
+        accessibilityLabel={meta}
+      >
+        {meta}
+      </Text>
+    ),
+    [meta, theme.colors.onSurface, styles.description]
+  );
+
+  const renderLeft = useCallback(
+    (props: { style?: object }) =>
+      post.imageUrl ? (
+        <Image
+          testID="cover-image"
+          accessibilityRole="image"
+          accessibilityLabel="cover"
+          source={{ uri: post.imageUrl }}
+          resizeMode="cover"
+          style={[props.style, styles.cover, { backgroundColor: theme.colors.surfaceVariant }]}
+        />
+      ) : (
+        <Surface
+          testID="placeholder-image"
+          accessibilityRole="image"
+          accessibilityLabel="place"
+          elevation={0}
+          style={[props.style as any, styles.placeholder, { backgroundColor: theme.colors.surfaceVariant }]}
+        >
+          <List.Icon color={theme.colors.onSurfaceVariant} icon="image-off-outline" />
+        </Surface>
+      ),
+    [post.imageUrl, theme.colors.surfaceVariant, theme.colors.onSurfaceVariant, styles]
+  );
 
   return (
     <List.Item
+      onPress={handlePress}
       accessibilityRole="button"
       accessibilityLabel={title}
-      contentStyle={{ justifyContent: 'space-between' }}
-      title={<Text variant="titleMedium" style={{ lineHeight: 22 }}>{title}</Text>}
+      contentStyle={styles.contentStyle}
+      title={<Text variant="titleMedium" style={styles.title}>{title}</Text>}
       titleNumberOfLines={3}
-      titleStyle={{ marginTop: -4 }}
-      description={() => (
-        <Text
-          variant="labelMedium"
-          numberOfLines={1}
-          style={{ color: theme.colors.onSurface, opacity: 0.6, letterSpacing: 0.4 }}
-          accessibilityLabel={meta}
-        >
-          {meta}
-        </Text>
-      )}
-      left={(props) =>
-        post.imageUrl ? (
-          <Image
-            testID='cover-image'
-            accessibilityRole="image"             
-            accessibilityLabel="cover"
-            source={{ uri: post.imageUrl }}
-            resizeMode="cover"
-            style={[
-              props.style,
-              {
-                width: COVER_SIZE.width,
-                height: COVER_SIZE.height,
-                borderRadius: 4,
-                backgroundColor: theme.colors.surfaceVariant,
-                alignSelf: 'flex-start',
-              },
-            ]}
-          />
-        ) : (
-          <Surface
-            testID='placeholder-image'
-            accessibilityRole="image"             
-            accessibilityLabel="place"
-            elevation={0}
-            style={[
-              props.style as any,
-              {
-                width: COVER_SIZE.width,
-                height: COVER_SIZE.height,
-                borderRadius: 4,
-                backgroundColor: theme.colors.surfaceVariant,
-                alignItems: 'center',
-                justifyContent: 'center',
-                alignSelf: 'flex-start',
-              },
-            ]}
-          >
-            <List.Icon color={theme.colors.onSurfaceVariant} icon="image-off-outline" />
-          </Surface>
-        )
-      }
+      titleStyle={styles.titleStyle}
+      description={renderDescription}
+      left={renderLeft}
     />
   );
 }

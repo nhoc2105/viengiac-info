@@ -8,4 +8,5 @@ export type Post = {
   summary: string;
   title: string;
   url: string;            // canonical link to open in browser
+  content: string;
 };

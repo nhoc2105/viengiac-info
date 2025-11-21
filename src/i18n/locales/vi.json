@@ -34,6 +34,10 @@
     "VM": "Chùa Viên Minh 🇨🇭"
   },
   "time": {
+    "elapsed": {
+      "long": "{{count}} {{unit}} trước",
+      "short": "{{count}} {{unit}}"
+    },
     "seconds": "giây",
     "minutes": "phút",
     "hours": "giờ",

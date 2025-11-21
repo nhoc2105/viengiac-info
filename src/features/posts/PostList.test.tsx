@@ -13,7 +13,6 @@ jest.mock('./PostItemSkeleton', () => {
   // eslint-disable-next-line react/display-name
   return () => <View testID="MockSkeleton" />;
 });
-
 jest.mock('react-native-paper', () => {
   const actualPaper = jest.requireActual('react-native-paper');
   return {
@@ -21,6 +20,13 @@ jest.mock('react-native-paper', () => {
     ActivityIndicator: (props: any) => <div {...props}>Mocked ActivityIndicator</div>,
   };
 });
+jest.mock('expo-router', () => ({
+  useRouter: () => ({
+    push: jest.fn(),
+    replace: jest.fn(),
+    back: jest.fn(),
+  }),
+}));
 
 describe('PostList Component', () => {
   const mockRefresh = jest.fn();
