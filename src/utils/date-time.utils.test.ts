@@ -1,12 +1,13 @@
 import i18n from '@/src/i18n';
-import { timeAgo } from '@/src/utils/date-time.utils';
+import { timeAgoLong, timeAgoShort } from '@/src/utils/date-time.utils';
 
 describe('timeAgo', () => {
   const base = new Date('2024-01-01T12:00:00Z').getTime();
   beforeAll(() => {
     i18n.changeLanguage('vi');
-    jest.useFakeTimers();
-    jest.setSystemTime(base);
+    jest
+      .useFakeTimers({ advanceTimers: true })
+      .setSystemTime(base);
   });
   afterAll(() => {
     jest.useRealTimers();
@@ -17,7 +18,7 @@ describe('timeAgo', () => {
     const t = 'not-a-date';
 
     // THEN
-    expect(timeAgo(t)).toBe('');
+    expect(timeAgoShort(t)).toBe('');
   });
 
   it('should format seconds', () => {
@@ -25,7 +26,7 @@ describe('timeAgo', () => {
     const t = new Date(base - 30 * 1000).toISOString();
 
     // THEN
-    expect(timeAgo(t)).toBe('30 giây');
+    expect(timeAgoLong(t)).toBe('30 giây trước');
   });
 
   it('should format minutes', () => {
@@ -33,7 +34,7 @@ describe('timeAgo', () => {
     const t = new Date(base - 5 * 60 * 1000).toISOString();
 
     // THEN
-    expect(timeAgo(t)).toBe('5 phút');
+    expect(timeAgoShort(t)).toBe('5 phút');
   });
 
   it('should format hours', () => {
@@ -41,7 +42,7 @@ describe('timeAgo', () => {
     const t = new Date(base - 3 * 60 * 60 * 1000).toISOString();
 
     // THEN
-    expect(timeAgo(t)).toBe('3 giờ');
+    expect(timeAgoLong(t)).toBe('3 giờ trước');
   });
 
   it('should format days', () => {
@@ -49,7 +50,7 @@ describe('timeAgo', () => {
     const t = new Date(base - 2 * 24 * 60 * 60 * 1000).toISOString();
 
     // THEN
-    expect(timeAgo(t)).toBe('2 ngày');
+    expect(timeAgoShort(t)).toBe('2 ngày');
   });
 
   it('should format months', () => {
@@ -57,7 +58,7 @@ describe('timeAgo', () => {
     const t = new Date(base - 4 * 30 * 24 * 60 * 60 * 1000).toISOString();
 
     // THEN
-    expect(timeAgo(t)).toBe('4 tháng');
+    expect(timeAgoLong(t)).toBe('4 tháng trước');
   });
 
   it('should format years', () => {
@@ -65,6 +66,6 @@ describe('timeAgo', () => {
     const t = new Date(base - 13 * 30 * 24 * 60 * 60 * 1000).toISOString();
 
     // THEN
-    expect(timeAgo(t)).toBe('1 năm');
+    expect(timeAgoShort(t)).toBe('1 năm');
   });
 });

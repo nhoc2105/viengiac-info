@@ -11,5 +11,6 @@ export function mapFirebasePost(firebasePost: FirebasePost): Post {
     imageUrl: firebasePost.coverImageUrl ?? '',
     author: firebasePost.author ?? [],
     publishedAt: firebasePost.modifiedGmt ?? '',
+    content: firebasePost.content ?? '',
   };
 }

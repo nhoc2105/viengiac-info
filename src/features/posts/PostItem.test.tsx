@@ -1,10 +1,20 @@
 import i18n from '@/src/i18n';
 import { paperTheme } from '@/src/theme/paper';
-import { render, screen, waitFor } from '@testing-library/react-native';
+import { fireEvent, render, screen, waitFor } from '@testing-library/react-native';
 import React, { act } from 'react';
 import { PaperProvider } from 'react-native-paper';
 import PostItem from './PostItem';
 import { Post } from './post.types';
+
+
+const mockRouterPush = jest.fn();
+jest.mock('expo-router', () => ({
+  useRouter: () => ({
+    push: mockRouterPush,
+    replace: jest.fn(),
+    back: jest.fn(),
+  }),
+}));
 
 const post: Post = {
   id: '1',
@@ -14,7 +24,8 @@ const post: Post = {
   publishedAt: '2025-01-01T00:00:00Z',
   author: ["Max", "Anna"],
   imageUrl: '',
-  summary: ''
+  summary: '',
+  content: '',
 };
 
 describe('PostItem', () => {
@@ -66,6 +77,27 @@ describe('PostItem', () => {
     await waitFor(() => {
       expect(screen.queryByTestId('cover-image')).toBeNull();
       expect(screen.getByTestId('placeholder-image')).toBeTruthy();
+    });
+  });
+
+  it('should navigate to details page on press', async () => {
+    // GIVEN
+    render(
+      <PaperProvider theme={paperTheme}>
+        <PostItem post={post as any} />
+      </PaperProvider>
+    );
+
+    // WHEN
+    const button = screen.getByRole('button', { name: /Hello &/i });
+    fireEvent.press(button);
+
+    // THEN
+    await waitFor(() => {
+      expect(mockRouterPush).toHaveBeenCalledWith({
+        pathname: '/post/details',
+        params: { id: post.id },
+      });
     });
   });
 });

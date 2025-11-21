@@ -42,7 +42,7 @@ export default function PostList() {
       return (
         <View testID='SkeletonLoader'>
           {Array.from({ length: skeletonCount }).map((_, i) => (
-            <PostItemSkeleton key={i} />
+            <PostItemSkeleton key={i} testID={'PostItemSkeleton'} />
           ))}
         </View>
       );

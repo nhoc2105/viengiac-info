@@ -34,6 +34,10 @@
     "VM": "Pagode Viên Minh 🇨🇭"
   },
   "time": {
+    "elapsed": {
+      "short": "{{count}} {{unit}}",
+      "long": "vor {{count}} {{unit}}"
+    },
     "seconds": "Sek",
     "minutes": "Min",
     "hours": "Std",
