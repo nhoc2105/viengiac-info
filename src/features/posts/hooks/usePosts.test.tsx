@@ -17,7 +17,8 @@ const mockPost = (id: string): Post => ({
   publishedAt: new Date().toISOString(),
   author: [],
   imageUrl: '',
-  summary: ''
+  summary: '',
+  content: ''
 });
 
 function IntegrationComponent() {

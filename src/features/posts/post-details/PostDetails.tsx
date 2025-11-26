@@ -1,68 +1,103 @@
+
 import { timeAgoLong } from '@/src/utils/date-time.utils';
 import { decodeHtmlEntities } from '@/src/utils/html.utils';
 import { useCallback, useMemo } from 'react';
 import { FlatList, useWindowDimensions, View } from 'react-native';
 import { Text, useTheme } from 'react-native-paper';
 import RenderHtml from 'react-native-render-html';
-import { SafeAreaView } from 'react-native-safe-area-context';
+import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
 import PostStorageService from '../services/post-storage.service';
+import { HtmlRenderers } from './html-renderer/HtmlRenderers';
 
 export default function PostDetails() {
+  const insets = useSafeAreaInsets();
   const theme = useTheme();
-
-  const post = PostStorageService.getInstance().getSelectedPost()
+  const post = PostStorageService.getInstance().getSelectedPost();
 
   const decodedHtml = useMemo(
     () => decodeHtmlEntities(post?.content || ''),
     [post?.content]
   );
 
-
   const chunks = useMemo(() => {
+    // Split by </p>, <br>, and <img> tags while keeping <img> tags intact
+    const regex = /<\/p>|<br\s*\/?>|(<img[^>]*>)/i;
     return decodedHtml
-      .split('</p>')
-      .filter(Boolean)
-      .map(p => p + '</p>');
+      .split(regex)
+      .map(s => s?.trim())
+      .filter(Boolean);
   }, [decodedHtml]);
 
   const windowWidth = useWindowDimensions().width;
-  const renderItem = useCallback(({ item }: { item: string }) => (
-    <View style={{ marginBottom: 8 }}>
-      <RenderHtml
-        contentWidth={windowWidth}
-        source={{ html: item }}
-        baseStyle={{
-          ...theme.fonts.titleLarge,
-          fontSize: 20,
-        }}
-      />
-    </View>
-  ), [windowWidth, theme.fonts]);
+  const contentWidth = windowWidth - 16 * 2;
+  
+  const renderers = HtmlRenderers(contentWidth);
+
+  const renderItem = useCallback(
+    ({ item, index }: { item: string, index: number }) => (
+      <View 
+        testID={`post-chunk-${index}`}
+        style={{ marginBottom: 8 }}
+      >
+        <RenderHtml
+          contentWidth={contentWidth}
+          source={{ html: item }}
+          baseStyle={{
+            ...theme.fonts.titleMedium,
+          }}
+          renderersProps={{
+            img: {
+              enableExperimentalPercentWidth: true
+            }
+          }}
+          renderers={renderers} // Use custom renderers
+        />
+      </View>
+    ),
+    [theme.fonts, contentWidth, renderers]
+  );
 
   if (!post) return null;
 
   const header = (
     <View>
-      <Text variant="headlineMedium" style={{ fontWeight: 700, marginBottom: 16 }}>
+      <Text 
+        testID="post-title"
+        variant="headlineMedium" 
+        style={{ fontWeight: '700', marginBottom: 16 }}
+      >
         {decodeHtmlEntities(post.title)}
       </Text>
-      <Text style={{ color: theme.colors.onSurfaceVariant, marginBottom: 16, opacity: 0.6 }}>
-        {timeAgoLong(post.publishedAt)} · {post.author}
+      <Text 
+        testID="post-meta" 
+        style={{ color: theme.colors.onSurfaceVariant, marginBottom: 16, opacity: 0.6 }}
+      >
+        {timeAgoLong(post.publishedAt)} · {post.author.join(', ')}
       </Text>
     </View>
   );
 
   return (
-    <SafeAreaView style={{ flex: 1, backgroundColor: theme.colors.surface }}>
-      <FlatList style={{ paddingHorizontal: 16 }}
+    <SafeAreaView
+      style={{
+        flex: 1,
+        paddingTop: insets.top,
+        paddingBottom: insets.bottom,
+        backgroundColor: theme.colors.surface,
+      }}
+      edges={[]}
+    >
+      <FlatList
+        testID="post-content-list"
+        style={{ paddingHorizontal: 16 }}
         ListHeaderComponent={header}
         data={chunks}
         keyExtractor={(_, index) => index.toString()}
         renderItem={renderItem}
-        maxToRenderPerBatch={2}
-        initialNumToRender={1}
-        windowSize={5}
-        removeClippedSubviews={false}
+        maxToRenderPerBatch={5}
+        initialNumToRender={2}
+        windowSize={11}
+        removeClippedSubviews={true}
       />
     </SafeAreaView>
   );

@@ -5,6 +5,7 @@ import { Stack } from 'expo-router';
 import React, { useEffect } from 'react';
 import { I18nextProvider } from 'react-i18next';
 import { PaperProvider } from 'react-native-paper';
+import { SafeAreaProvider } from 'react-native-safe-area-context';
 
 // Root layout (global providers / theme would go here)
 export default function RootLayout() {
@@ -18,7 +19,9 @@ export default function RootLayout() {
   return (
     <PaperProvider theme={paperTheme}>
       <I18nextProvider i18n={i18n}>
-        <Stack screenOptions={{ headerShown: false }} />
+        <SafeAreaProvider>
+          <Stack screenOptions={{ headerShown: false }} />
+        </SafeAreaProvider> 
       </I18nextProvider>
     </PaperProvider>
   );
