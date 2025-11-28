@@ -12,6 +12,13 @@ jest.mock('@/src/utils/date-time.utils', () => ({
   timeAgoLong: jest.fn(() => '10 days ago')
 }));
 
+jest.mock('./html-renderer/IframeRenderer', () => {
+  // eslint-disable-next-line @typescript-eslint/no-require-imports
+  const { View } = require('react-native');
+  // eslint-disable-next-line react/display-name
+  return () => <View testID="mock-iframe-renderer" />;
+});
+
 const mockPostWithImage = {
   id: '1',
   title: 'Post with Image',

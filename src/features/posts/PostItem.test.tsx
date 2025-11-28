@@ -16,6 +16,10 @@ jest.mock('expo-router', () => ({
   }),
 }));
 
+jest.mock('@/src/utils/date-time.utils', () => ({
+  timeAgoShort: jest.fn(() => '10 days ago')
+}));
+
 const post: Post = {
   id: '1',
   sourceId: 'VG',
@@ -44,7 +48,7 @@ describe('PostItem', () => {
     // THEN
     await waitFor(() => {
       expect(screen.getByText('Hello & <em>world</em>')).toBeTruthy();
-      expect(screen.getByText('Tổ Đình Viên Giác 🇩🇪 · 10 tháng')).toBeTruthy();
+      expect(screen.getByText('Viên Giác 🇩🇪 · 10 days ago')).toBeTruthy();
     });
   });
 

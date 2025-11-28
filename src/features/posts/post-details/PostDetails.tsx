@@ -7,7 +7,7 @@ import { Text, useTheme } from 'react-native-paper';
 import RenderHtml from 'react-native-render-html';
 import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
 import PostStorageService from '../services/post-storage.service';
-import { HtmlRenderers } from './html-renderer/HtmlRenderers';
+import { customHtmlModels, CustomHtmlRenderers } from './html-renderer/CustomHtmlRenderers';
 
 export default function PostDetails() {
   const insets = useSafeAreaInsets();
@@ -20,8 +20,8 @@ export default function PostDetails() {
   );
 
   const chunks = useMemo(() => {
-    // Split by </p>, <br>, and <img> tags while keeping <img> tags intact
-    const regex = /<\/p>|<br\s*\/?>|(<img[^>]*>)/i;
+    const splitTags = ['</p>', '<br\\s*/?>', '(<img[^>]*>)', '(<iframe[^>]*>)'];
+    const regex = new RegExp(splitTags.join('|'), 'i');
     return decodedHtml
       .split(regex)
       .map(s => s?.trim())
@@ -30,12 +30,12 @@ export default function PostDetails() {
 
   const windowWidth = useWindowDimensions().width;
   const contentWidth = windowWidth - 16 * 2;
-  
-  const renderers = HtmlRenderers(contentWidth);
+
+  const renderers = CustomHtmlRenderers(contentWidth);
 
   const renderItem = useCallback(
     ({ item, index }: { item: string, index: number }) => (
-      <View 
+      <View
         testID={`post-chunk-${index}`}
         style={{ marginBottom: 8 }}
       >
@@ -51,6 +51,7 @@ export default function PostDetails() {
             }
           }}
           renderers={renderers} // Use custom renderers
+          customHTMLElementModels={customHtmlModels}
         />
       </View>
     ),
@@ -61,15 +62,15 @@ export default function PostDetails() {
 
   const header = (
     <View>
-      <Text 
+      <Text
         testID="post-title"
-        variant="headlineMedium" 
+        variant="headlineMedium"
         style={{ fontWeight: '700', marginBottom: 16 }}
       >
         {decodeHtmlEntities(post.title)}
       </Text>
-      <Text 
-        testID="post-meta" 
+      <Text
+        testID="post-meta"
         style={{ color: theme.colors.onSurfaceVariant, marginBottom: 16, opacity: 0.6 }}
       >
         {timeAgoLong(post.publishedAt)} · {post.author.join(', ')}
