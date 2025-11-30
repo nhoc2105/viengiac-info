@@ -21,6 +21,13 @@ jest.mock('./html-renderer/IframeRenderer', () => {
   return () => <View testID="mock-iframe-renderer" />;
 });
 
+jest.mock('./html-renderer/AudioRenderer', () => {
+  // eslint-disable-next-line @typescript-eslint/no-require-imports
+  const { View } = require('react-native');
+  // eslint-disable-next-line react/display-name
+  return () => <View testID="mock-audio-renderer" />;
+});
+
 const mockPost = {
   id: '1',
   title: 'Hello &amp; <em>world</em>',

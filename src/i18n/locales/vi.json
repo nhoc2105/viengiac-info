@@ -26,12 +26,30 @@
     }
   },
   "organizations": {
-    "GDPTDQ": "GĐPT Đức Quốc 🇩🇪",
-    "VG": "Viên Giác 🇩🇪",
-    "VL": "Viên Lạc 🇩🇪",
-    "VLTDE": "Vô Lượng Thọ 🇩🇪",
-    "VLTVI": "Vô Lượng Thọ 🇩🇪",
-    "VM": "Viên Minh 🇨🇭"
+    "GDPTDQ": {
+      "short": "GĐPT Đức Quốc 🇩🇪",
+      "long": "GĐPT Đức Quốc 🇩🇪"
+    },
+    "VG": {
+      "short": "Viên Giác 🇩🇪",
+      "long": "Tổ Đình Viên Giác 🇩🇪"
+    },
+    "VL": {
+      "short": "Viên Lạc 🇩🇪",
+      "long": "Tu Viện Viên Lạc 🇩🇪"
+    },
+    "VLTDE": {
+      "short": "Vô Lượng Thọ 🇩🇪",
+      "long": "Tu Viện Vô Lượng Thọ 🇩🇪"
+    },
+    "VLTVI": {
+      "short": "Vô Lượng Thọ 🇩🇪",
+      "long": "Tu Viện Vô Lượng Thọ 🇩🇪"
+    },
+    "VM": {
+      "short": "Viên Minh 🇨🇭",
+      "long": "Chùa Viên Minh 🇨🇭"
+    }
   },
   "time": {
     "elapsed": {

@@ -3,13 +3,10 @@
 import { Image } from 'expo-image';
 import React, { useMemo } from 'react';
 import { useTheme } from 'react-native-paper';
-import { CustomRendererProps, TBlock, useIMGElementProps } from 'react-native-render-html';
+import { useIMGElementProps } from 'react-native-render-html';
+import { RendererProps } from './CustomHtmlRenderers';
 
-interface ImageRendererProps extends CustomRendererProps<TBlock> {
-  contentWidth: number;
-}
-
-export default function ImageRenderer({ contentWidth, ...props }: ImageRendererProps) {
+export default function ImageRenderer({ contentWidth, ...props }: RendererProps) {
   const imgElementProps = useIMGElementProps(props);
   const uri = imgElementProps.source.uri;
   const theme = useTheme();
@@ -28,7 +25,6 @@ const aspectRatio = useMemo(() => {
     () => [{ marginBottom: 8, width: contentWidth, aspectRatio }],
     [contentWidth, aspectRatio]
   );
-
 
   return (
     <Image

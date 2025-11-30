@@ -1,10 +1,11 @@
 import { createFirebaseProvider } from "@/src/api/providers/firebase/firebase.provider";
+import { PostProvider } from "@/src/api/providers/post-provider.types";
 import { PAGE_SIZE } from "@/src/constants/config.const";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { Post } from "../post.types";
 
-export function usePosts() {
-  const providerRef = useRef(createFirebaseProvider());
+export function usePosts(provider: PostProvider) {
+  const providerRef = useRef(provider);
   const [items, setItems] = useState<Post[]>([]);
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
