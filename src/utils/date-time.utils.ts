@@ -1,5 +1,19 @@
 import { t } from 'i18next';
 
+export function formatDuration(seconds: number): string {
+  if (seconds < 0) {
+    return '00:00';
+  }
+
+  const round_sec = Math.round(seconds);
+  const h = Math.floor(round_sec / 3600);
+  const m = Math.floor((round_sec % 3600) / 60);
+  const sec = round_sec % 60;
+  return (h ? [h, m, sec] : [m, sec])
+    .map(v => String(v).padStart(2, '0'))
+    .join(':');
+};
+
 export function timeAgoShort(isoDate: string): string {
   return timeAgo(isoDate, false);
 }

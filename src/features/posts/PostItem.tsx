@@ -43,7 +43,7 @@ function PostItem({ post }: { post: Post }) {
   // Derived values
   const title = useMemo(() => decodeHtmlEntities(post.title ?? ''), [post.title]);
   const elapsed = useMemo(() => timeAgoShort(post.publishedAt), [post.publishedAt]);
-  const sourceName = useMemo(() => t(`organizations.${post.sourceId}`), [post.sourceId]);
+  const sourceName = useMemo(() => t(`organizations.${post.sourceId}.short`), [post.sourceId]);
   const meta = useMemo(() => [sourceName, elapsed].filter(Boolean).join(' · '), [sourceName, elapsed]);
 
   // Stable callbacks

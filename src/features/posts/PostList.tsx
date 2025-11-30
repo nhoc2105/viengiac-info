@@ -2,6 +2,7 @@ import React, { useCallback, useMemo } from 'react';
 import { BackHandler, Dimensions, FlatList, RefreshControl, View } from 'react-native';
 import { ActivityIndicator, Divider, Text, useTheme } from 'react-native-paper';
 
+import { createFirebaseProvider } from '@/src/api/providers/firebase/firebase.provider';
 import { usePosts } from '@/src/features/posts/hooks/usePosts';
 import PostItem, { COVER_SIZE } from '@/src/features/posts/PostItem';
 import i18n from '@/src/i18n';
@@ -12,7 +13,8 @@ import { Post } from './post.types';
 import PostItemSkeleton from './PostItemSkeleton';
 
 export default function PostList() {
-  const { items, loading, error, refreshing, canLoadMore, refresh, loadMore } = usePosts();
+  const firebaseProvider = createFirebaseProvider();
+  const { items, loading, error, refreshing, canLoadMore, refresh, loadMore } = usePosts(firebaseProvider);
   const theme = useTheme();
 
   /** Stable callbacks */

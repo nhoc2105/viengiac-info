@@ -26,12 +26,30 @@
     }
   },
   "organizations": {
-    "GDPTDQ": "Buddhist Youth Assoc. 🇩🇪",
-    "VG": "Viên Giác Pagoda 🇩🇪",
-    "VL": "Viên Lạc Retreat Center 🇩🇪",
-    "VLTDE": "Amitayus Monastery 🇩🇪",
-    "VLTVI": "Amitayus Monastery 🇩🇪",
-    "VM": "Viên Minh Pagoda 🇨🇭"
+    "GDPTDQ": {
+      "short": "Buddhist Youth Assoc. 🇩🇪",
+      "long": "Vietnamese buddhist Youth Association 🇩🇪"
+    },
+    "VG": {
+      "short": "Viên Giác 🇩🇪",
+      "long": "Viên Giác Pagoda 🇩🇪"
+    },
+    "VL": {
+      "short": "Viên Lạc 🇩🇪",
+      "long": "Viên Lạc Retreat Center 🇩🇪"
+    },
+    "VLTDE": {
+      "short": "Amitayus Monastery 🇩🇪",
+      "long": "Amitayus Retreat Monastery 🇩🇪"
+    },
+    "VLTVI": {
+      "short": "Amitayus Monastery 🇩🇪",
+      "long": "Amitayus Retreat Monastery 🇩🇪"
+    },
+    "VM": {
+      "short": "Viên Minh 🇨🇭",
+      "long": "Viên Minh Pagoda 🇨🇭"
+    }
   },
   "time": {
     "elapsed": {

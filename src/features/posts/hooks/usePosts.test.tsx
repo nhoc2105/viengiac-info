@@ -21,8 +21,15 @@ const mockPost = (id: string): Post => ({
   content: ''
 });
 
+
+const mockProvider = {
+  id: 'firebase:posts',
+  label: 'Firebase Posts',
+  loadPage: mockLoadPage,
+};
+
 function IntegrationComponent() {
-  const { items, loading, error, refreshing, canLoadMore, refresh, loadMore } = usePosts();
+  const { items, loading, error, refreshing, canLoadMore, refresh, loadMore } = usePosts(mockProvider);
   return (
     <>
       {items.map((item) => (

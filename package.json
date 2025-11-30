@@ -17,6 +17,7 @@
   "dependencies": {
     "-": "^0.0.1",
     "@expo/vector-icons": "^15.0.3",
+    "@react-native-assets/slider": "^11.0.12",
     "@react-native-async-storage/async-storage": "2.2.0",
     "@react-native-community/netinfo": "^11.4.1",
     "@react-native-vector-icons/material-design-icons": "^12.3.0",
@@ -24,6 +25,7 @@
     "@react-navigation/elements": "^2.3.8",
     "@react-navigation/native": "^7.1.6",
     "expo": "~54.0.25",
+    "expo-audio": "~1.0.15",
     "expo-blur": "~15.0.7",
     "expo-constants": "~18.0.10",
     "expo-dev-client": "~6.0.18",

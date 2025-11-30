@@ -1,16 +1,12 @@
-import AutoHeightWebView from '@/src/shared/components/complex/AutoHeightWebView';
+import AutoHeightWebView from '@/src/shared/components/complex/auto-height-webview/AutoHeightWebView';
 import React from 'react';
-import { CustomRendererProps, TBlock } from 'react-native-render-html';
-
-interface IframeRendererProps extends CustomRendererProps<TBlock> {
-  contentWidth: number;
-}
+import { RendererProps } from './CustomHtmlRenderers';
 
 /**
  * Renders an <iframe> inside React Native using WebView.
  * Height defaults to contentWidth / 2. Uses a loading overlay.
  */
-export default function IframeRenderer({ tnode, contentWidth }: IframeRendererProps) {
+export default function IframeRenderer({ tnode, contentWidth }: RendererProps) {
   const src = tnode.attributes.src;
 
   return (

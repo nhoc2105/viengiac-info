@@ -20,7 +20,7 @@ export default function PostDetails() {
   );
 
   const chunks = useMemo(() => {
-    const splitTags = ['</p>', '<br\\s*/?>', '(<img[^>]*>)', '(<iframe[^>]*>)'];
+    const splitTags = ['</p>', '<br\\s*/?>', '(<img[^>]*>)', '(<iframe[^>]*>)', '(</audio>)'];
     const regex = new RegExp(splitTags.join('|'), 'i');
     return decodedHtml
       .split(regex)
