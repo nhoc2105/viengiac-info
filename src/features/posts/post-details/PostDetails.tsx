@@ -20,14 +20,20 @@ export default function PostDetails() {
   );
 
   const chunks = useMemo(() => {
-    const splitTags = ['</p>', '<br\\s*/?>', '(<img[^>]*>)', '(<iframe[^>]*>)', '(</audio>)'];
+    const splitTags = [
+      '</p>', 
+      '<br\\s*/?>', 
+      '(<img[^>]*>)', 
+      '(<iframe[^>]*>)', 
+      '(</audio>)',
+      '(<audio[^>]*src=["\'][^"\']+["\'][^>]*>)'
+    ];
     const regex = new RegExp(splitTags.join('|'), 'i');
     return decodedHtml
       .split(regex)
       .map(s => s?.trim())
       .filter(Boolean);
   }, [decodedHtml]);
-
   const windowWidth = useWindowDimensions().width;
   const contentWidth = windowWidth - 16 * 2;
 

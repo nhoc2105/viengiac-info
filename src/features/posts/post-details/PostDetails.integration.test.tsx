@@ -31,7 +31,7 @@ const mockPostWithImage = {
   title: 'Post with Image',
   publishedAt: '2025-01-01T00:00:00Z',
   author: ['Max'],
-  content: '<p>Text before image</p><img src="https://example.com/test.jpg" width="200" height="100"/>',
+  content: '<audio src="a.mp3"/><img src="https://example.com/test.jpg" width="200" height="100"/>',
   summary: '',
   url: 'https://example.com'
 };
@@ -52,9 +52,11 @@ describe('PostDetails Integration', () => {
       </PaperProvider>
     );
 
-    // THEN ImageRenderer should be rendered with correct props
-    
+    // THEN
     const imageRenderer = getByTestId('image-renderer');
     expect(imageRenderer.props.source[0].uri).toBe('https://example.com/test.jpg');
+
+    const audioRenderer = getByTestId('mock-audio-renderer');
+    expect(audioRenderer).toBeTruthy();
   });
 });
