@@ -1,5 +1,5 @@
 import { formatDuration } from '@/src/utils/date-time.utils';
-import { FontAwesome } from '@expo/vector-icons';
+import { FontAwesome6 } from '@expo/vector-icons';
 import { Slider } from '@react-native-assets/slider';
 import {
   setAudioModeAsync,
@@ -77,8 +77,8 @@ export default function AudioPlayer({ source }: AudioPlayerProps) {
         onPress={playPause}>
         {
           status?.playing 
-            ? <FontAwesome name='pause' size={24} color={theme.colors.primary} />
-            : <FontAwesome name='play' size={24} color={theme.colors.primary} />
+            ? <FontAwesome6 name='pause' size={24} color={theme.colors.primary} />
+            : <FontAwesome6 name='play' size={24} color={theme.colors.primary} />
         }
       </TouchableOpacity>
       <Text

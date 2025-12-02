@@ -11,8 +11,12 @@ export default function AudioRenderer({ tnode }: RendererProps) {
       .filter(Boolean);
   }, [tnode]);
 
+  if (tnode.attributes?.src) {
+    return <AudioPlayer source={tnode.attributes.src} />;
+  }
+
   return (
-    <View>
+    <View testID="audio-renderer">
       {sources.map((src, idx) => (
         <AudioPlayer key={`${src}-${idx}`} source={src} />
       ))}
