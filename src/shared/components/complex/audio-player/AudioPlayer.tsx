@@ -12,9 +12,10 @@ import { Text, useTheme } from 'react-native-paper';
 
 type AudioPlayerProps = {
   source: string; 
+  contentWidth: number;
 };
 
-export default function AudioPlayer({ source }: AudioPlayerProps) {
+export default function AudioPlayer({ source, contentWidth }: AudioPlayerProps) {
   const player = useAudioPlayer(source, { updateInterval: 500 });
   const status = useAudioPlayerStatus(player);
   const theme = useTheme();
@@ -66,7 +67,7 @@ export default function AudioPlayer({ source }: AudioPlayerProps) {
         backgroundColor: theme.colors.surfaceVariant,
         paddingHorizontal: 32,
         paddingVertical: 8,
-        marginVertical: 4
+        marginVertical: 4,
       }}>
       <TouchableOpacity
         testID='play-pause-control'
