@@ -26,7 +26,9 @@ export default function PostDetails() {
       '(<img[^>]*>)', 
       '(<iframe[^>]*>)', 
       '(</audio>)',
-      '(<audio[^>]*src=["\'][^"\']+["\'][^>]*>)'
+      '(<audio[^>]*src=["\'][^"\']+["\'][^>]*>)',
+      '(</video>)',
+      '(<video[^>]*src=["\'][^"\']+["\'][^>]*>)',
     ];
     const regex = new RegExp(splitTags.join('|'), 'i');
     return decodedHtml
@@ -34,6 +36,7 @@ export default function PostDetails() {
       .map(s => s?.trim())
       .filter(Boolean);
   }, [decodedHtml]);
+
   const windowWidth = useWindowDimensions().width;
   const contentWidth = windowWidth - 16 * 2;
 

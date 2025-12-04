@@ -4,6 +4,7 @@ import { CustomRendererProps, HTMLContentModel, HTMLElementModel, TBlock } from 
 import AudioRenderer from './AudioRenderer';
 import IframeRenderer from './IframeRenderer';
 import ImageRenderer from './ImageRenderer';
+import VideoRenderer from './VideoRenderer';
 
 export interface RendererProps extends CustomRendererProps<TBlock> {
   contentWidth: number;
@@ -21,18 +22,24 @@ export const CustomHtmlRenderers = (contentWidth: number) => ({
   audio: (props: CustomRendererProps<TBlock>) => (
     <AudioRenderer {...props} contentWidth={contentWidth} />
   ),
-  source: () => null // Prevent removal of <source>
+  video: (props: CustomRendererProps<TBlock>) => (
+    <VideoRenderer {...props} contentWidth={contentWidth} />
+  ),
 
 });
 
 export const customHtmlModels = {
   iframe: HTMLElementModel.fromCustomModel({
     tagName: 'iframe',
-    contentModel: HTMLContentModel.mixed
+    contentModel: HTMLContentModel.block
   }),
   audio: HTMLElementModel.fromCustomModel({
     tagName: 'audio',
-    contentModel: HTMLContentModel.mixed
+    contentModel: HTMLContentModel.block
+  }),
+  video: HTMLElementModel.fromCustomModel({
+    tagName: 'audio',
+    contentModel: HTMLContentModel.block
   }),
 };
 

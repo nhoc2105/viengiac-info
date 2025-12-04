@@ -5,5 +5,5 @@ export function decodeHtmlEntities(text: string): string {
 }
 
 export function stripHtml(html: string) {
-  return (html ?? '').replace(/<[^>]+>/g, '').trim();
+  return html.replace(/<[^>]+>/g, '').trim();
 }

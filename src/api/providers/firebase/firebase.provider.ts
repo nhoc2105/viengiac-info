@@ -5,7 +5,7 @@ import { LoadPageResult, PostProvider } from '../post-provider.types';
 import { mapFirebasePost } from './firebase-post.mapper';
 import { FirebasePost } from './firebase-post.type';
 
-const FIREBASE_POST_COLLECTION = 'posts';
+const FIREBASE_POST_COLLECTION = 'test_posts';
 
 export function createFirebaseProvider(): PostProvider {
   let lastVisible: any = null;
